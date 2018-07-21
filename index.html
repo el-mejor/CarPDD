@@ -80,7 +80,7 @@
             alt = position.coords.altitude;
             hdg = position.coords.heading;
             spd = position.coords.speed;
-            
+
             display();
         }
         
@@ -97,7 +97,7 @@
             document.getElementById("spdlimits").innerHTML = "";
             for (var i = 0; i < spdlmts.length; i++)
             {
-                document.getElementById("spdlimits").innerHTML += `<div  id="limit${spdlmts[i]}" style="border:1px solid gray;margin:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;">${spdlmts[i]} km/h</div> `;
+                document.getElementById("spdlimits").innerHTML += `<div  id="limit${spdlmts[i]}" style="width:50%;border:1px solid gray;margin:auto;padding:5px;border-radius:5px;text-align:center;font-size:2em;">${spdlmts[i]} km/h</div> `;
                 
                 if (spd <= spdlmts[i])
                 {
