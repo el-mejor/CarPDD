@@ -114,19 +114,19 @@
                 
                 var currvals = "";
                 if (spd)
-                { currvals += `<span style="font-family:courier;font-size:2em;">${spd} km/h </span><br>`; }
+                { currvals += `<span style="font-size:2em;">${Math.trunc(spd)} km/h </span><br>`; }
                 else
                 { currvals += "<span style='font-size:2em;color:red;'> XXXX km/h</span><br>"; }
                 
                 var curralt;
                 if (alt)
-                { currvals += `<span style="font-size:2em;">${alt} m </span><br>`; }
+                { currvals += `<span style="font-size:2em;">${Math.trunc(alt)} m </span><br>`; }
                 else
                 { currvals += "<span style='font-size:2em;color:red;'> XXXX m</span><br>"; }
                 
                 var currhdg;
                 if (hdg)
-                { currvals += `<span style="font-size:2em;">${hdg} ° </span><br>`; }
+                { currvals += `<span style="font-size:2em;">${Math.trunc(hdg)} ° </span><br>`; }
                 else
                 { currvals += "<span style='font-size:2em;color:red;'> XXXX °</span><br>"; }
                 
