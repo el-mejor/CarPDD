@@ -16,17 +16,25 @@
 			<h2>DEBUG: CURR DATA</h2>
 			<div class="showhide"><a class="showhidebutton"><img class="showimg" /></a></div>
 			<div class="divcont">
-                <p id="currpostest">No Data!</p>
+                <p id="currpostest" style="font-family:courier;">No Data!</p>
             </div>
         </div>
-    </div>	   
-	</div>
+    </div>	 
+    <div class="divcontainer">
+    <div class="divcol">         			
+        <h2>PDD</h2>
+        <div class="showhide"><a class="showhidebutton"><img class="showimg" /></a></div>
+        <div class="divcont">
+            <p id="curr" style="font-family:courier;">No Data!</p>
+        </div>
+    </div>
+    </div>	
 	<div class="divcontainer">
 		<div class="divcol">         			
 			<h2>SPEED CTRL</h2>
 			<div class="showhide"><a class="showhidebutton"><img class="showimg" /></a></div>
 			<div class="divcont">
-                <div id="spdlimits"><p>No Data!</p></div>
+                <p id="spdlimits" style="font-family:courier;">No Data!</p>
             </div>
         </div>
     </div>
@@ -89,23 +97,50 @@
             document.getElementById("spdlimits").innerHTML = "";
             for (var i = 0; i < spdlmts.length; i++)
             {
-                document.getElementById("spdlimits").innerHTML += `<p id="limit${spdlmts[i]}">${spdlmts[i]} km/h</p>`;
+                document.getElementById("spdlimits").innerHTML += `<span  id="limit${spdlmts[i]}" style="border:1px solid gray;margin:5px;padding:5px;border-radius:5px;">${spdlmts[i]} km/h</span> `;
                 
-                if (spd + tolerancespdlmt > spdlmts[i])
-                {
-                    document.getElementById("limit" + spdlmts[i]).style.background = "red";
-                }
-                else
+                if (spd <= spdlmts[i])
                 {
                     document.getElementById("limit" + spdlmts[i]).style.background = "lime";
                 }
+                else if (spd > spdlmts[i] + tolerancespdlmt)
+                {
+                    document.getElementById("limit" + spdlmts[i]).style.background = "tomato";
+                }
+                else
+                {
+                    document.getElementById("limit" + spdlmts[i]).style.background = "gold";
+                }
+                
+                var currvals = "";
+                if (spd)
+                { currvals += `<span style="font-family:courier;font-size:2em;">${spd} km/h </span><br>`; }
+                else
+                { currvals += "<span style='font-size:2em;color:red;'> XXXX km/h</span><br>"; }
+                
+                var curralt;
+                if (alt)
+                { currvals += `<span style="font-size:2em;">${alt} m </span><br>`; }
+                else
+                { currvals += "<span style='font-size:2em;color:red;'> XXXX m</span><br>"; }
+                
+                var currhdg;
+                if (hdg)
+                { currvals += `<span style="font-size:2em;">${hdg} ° </span><br>`; }
+                else
+                { currvals += "<span style='font-size:2em;color:red;'> XXXX °</span><br>"; }
+                
+                document.getElementById("curr").innerHTML = currvals;
             }
         }
         
         function errorPosition()
         {
-            var testout = document.getElementById("currpostest");
-            testout.innerHTML = "No Data!";
+            document.getElementById("currpostest").innerHTML = "No Data!";
+            
+            document.getElementById("spdlimits").innerHTML = "No Data!";
+            
+            document.getElementById("curr").innerHTML = "No Data!";
         }
         
         function showHideBox()
