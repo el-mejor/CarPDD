@@ -5,17 +5,45 @@
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="style.css" />
     <title id="title1">Test</title>
 </head>
 <body>
-<div id="currpostest"></div>
+	<h1 id="title2">CarPDD</h1>
+	<div class="divcontainer">
+		<div class="divcol">         			
+			<h2>DEBUG: CURR DATA</h2>
+			<div class="showhide"><a class="showhidebutton"><img class="showimg" /></a></div>
+			<div class="divcont">
+                <p id="currpostest"></p>
+            </div>
+        </div>
+    </div>	   
+	</div>
+	<div class="divcontainer">
+		<div class="divcol">         			
+			<h2>xxxxL</h2>
+			<div class="showhide"><a class="showhidebutton"><img class="showimg" /></a></div>
+			<div class="divcont">
+            </div>
+        </div>
+    </div>
+    
     <script>
+        var objs = document.getElementsByClassName("showhidebutton");
+	
+        for (i = 0; i < objs.length; i++)
+        {
+            objs[i].addEventListener("click", showHideBox);		
+        }
+        
         var testout = document.getElementById("currpostest");
         var lat;
         var lon;
         var alt;
         var hdg;
+        var spd;
         var datacnt = 0;
         
         getpos();
@@ -40,6 +68,7 @@
             lon = position.coords.longitude;
             alt = position.coords.altitude;
             hdg = position.coords.heading;
+            spd = position.coords.speed;
             
             test();
         }
@@ -51,11 +80,20 @@
             testout.innerHTML += "Lon: " + lon + "<br>";
             testout.innerHTML += "Alt: " + alt + "<br>";
             testout.innerHTML += "Hdg: " + hdg + "<br>";
-            
-            var img = new Image();
-            img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + lat + "," + lon + "&zoom=13&size=300x300&sensor=false";
-
-            testout.appendChild(img);
+            testout.innerHTML += "Spd: " + spd + "<br>";
+        }
+        
+        function showHideBox()
+        {
+            this.parentElement.nextElementSibling.classList.toggle("hidden");
+            if (this.parentElement.nextElementSibling.classList.contains("hidden"))
+            {
+                this.children[0].classList.replace("hideimg", "showimg");
+            }
+            else
+            {
+                this.children[0].classList.replace("showimg", "hideimg");
+            }
         }
     </script>
 </body>
