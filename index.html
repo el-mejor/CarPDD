@@ -97,7 +97,7 @@
             document.getElementById("spdlimits").innerHTML = "";
             for (var i = 0; i < spdlmts.length; i++)
             {
-                document.getElementById("spdlimits").innerHTML += `<span  id="limit${spdlmts[i]}" style="border:1px solid gray;margin:5px;padding:5px;border-radius:5px;">${spdlmts[i]} km/h</span> `;
+                document.getElementById("spdlimits").innerHTML += `<div  id="limit${spdlmts[i]}" style="border:1px solid gray;margin:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;">${spdlmts[i]} km/h</div> `;
                 
                 if (spd <= spdlmts[i])
                 {
