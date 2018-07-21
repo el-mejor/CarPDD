@@ -9,6 +9,54 @@
     <title id="title1">Test</title>
 </head>
 <body>
-Test!
+<div id="currpostest"></div>
+    <script>
+        var testout = document.getElementById("currpostest");
+        var lat;
+        var lon;
+        var alt;
+        var hdg;
+        var datacnt = 0;
+        
+        getpos();
+                
+        function getpos()
+        {            
+            if (navigator.geolocation) 
+            {
+                navigator.geolocation.watchPosition(showPosition);
+            } 
+            else 
+            {
+                testout.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+        
+        function showPosition(position) 
+        {
+            datacnt += 1;
+            
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            alt = position.coords.altitude;
+            hdg = position.coords.heading;
+            
+            test();
+        }
+        
+        function test()
+        {
+            testout.innerHTML = "Cnt: " + datacnt + "<br>";
+            testout.innerHTML += "Lat: " + lat + "<br>";
+            testout.innerHTML += "Lon: " + lon + "<br>";
+            testout.innerHTML += "Alt: " + alt + "<br>";
+            testout.innerHTML += "Hdg: " + hdg + "<br>";
+            
+            var img = new Image();
+            img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + lat + "," + lon + "&zoom=13&size=300x300&sensor=false";
+
+            testout.appendChild(img);
+        }
+    </script>
 </body>
 </html>
