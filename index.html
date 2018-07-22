@@ -90,12 +90,11 @@
             
             var _dst = getDistanceFromLatLonInKm(lat,lon,_lat,_lon);
                     
-            if (spd > 0)
-            /*if (_dst >= acc / 1000.0)*/
+            if (_dst >= acc / 1000.0)
             {                
                 dst += _dst;
-                /*lat = _lat;
-                lon = _lon;*/
+                lat = _lat;
+                lon = _lon;
             }
             
             display();
