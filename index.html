@@ -132,19 +132,19 @@
                 
                 var currvals = "";
                 
-                currvals += showvalue(alt, "m");
-                currvals += showvalue(dst, "km");
-                currvals += showvalue(spd, "km/h");
-                currvals += showvalue(hdg, "°");
+                currvals += showvalue(alt, "m", 1);
+                currvals += showvalue(dst, "km", 1000);
+                currvals += showvalue(spd, "km/h", 10);
+                currvals += showvalue(hdg, "°", 1);
                 
                 document.getElementById("curr").innerHTML = currvals;
             }
         }
         
-        function showvalue(value, unit) {
+        function showvalue(value, unit, decimals) {
             var out;
             if (value)
-            { out = `<div style="width:50%;border:1px solid gray;margin:auto;margin-bottom:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;background:gray;color:lime;">${Math.trunc(value)} ${unit}</div>`; }
+            { out = `<div style="width:50%;border:1px solid gray;margin:auto;margin-bottom:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;background:gray;color:lime;">${Math.trunc(value*decimals)/decimals} ${unit}</div>`; }
             else
             { out = `<div style="width:50%;border:1px solid gray;margin:auto;margin-bottom:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;background:gray;color:red;"> XXXX ${unit}</div>`; }
             return out;
