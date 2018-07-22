@@ -65,7 +65,7 @@
         {            
             if (navigator.geolocation) 
             {
-                navigator.geolocation.watchPosition(showPosition, errorPosition);
+                navigator.geolocation.watchPosition(showPosition, errorPosition, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true });
             } 
             else 
             {
@@ -77,20 +77,20 @@
         {
             datacnt += 1;
             
-            var _lat = lat;
-            var _lon = lon;
+            var _lat = position.coords.latitude;
+            var _lon = position.coords.longitude;
             
-            lat = position.coords.latitude;
-            lon = position.coords.longitude;
             alt = position.coords.altitude;
             hdg = position.coords.heading;
-            spd = position.coords.speed;
+            spd = position.coords.speed * 3.6;
             acc = position.coords.accuracy;
             var _dst = getDistanceFromLatLonInKm(lat,lon,_lat,_lon);
                      
             if (_dst >= acc / 1000.0)
-            {
+            {                
                 dst += _dst;
+                lat = _lat;
+                lon = _lon;
             }
             
             display();
