@@ -84,8 +84,13 @@
             alt = position.coords.altitude;
             hdg = position.coords.heading;
             spd = position.coords.speed;
-            dst += getDistanceFromLatLonInKm(lat,lon,_lat,_lon);
-                        
+            var _dst = getDistanceFromLatLonInKm(lat,lon,_lat,_lon);
+                     
+            if (_dst > 0)
+            {
+                dst += _dst;
+            }
+            
             display();
         }
 
