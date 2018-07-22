@@ -84,6 +84,10 @@
             hdg = position.coords.heading;
             spd = position.coords.speed * 3.6;
             acc = position.coords.accuracy;
+            
+            if (!lat)
+            { lat = _lat; lon = _lon; }
+            
             var _dst = getDistanceFromLatLonInKm(lat,lon,_lat,_lon);
                      
             if (_dst >= acc / 1000.0)
