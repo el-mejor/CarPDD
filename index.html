@@ -52,6 +52,7 @@
         var alt;
         var hdg;
         var spd;
+        var acc;
         var dst = 0;
         var datacnt = 0;
         
@@ -84,9 +85,10 @@
             alt = position.coords.altitude;
             hdg = position.coords.heading;
             spd = position.coords.speed;
+            acc = position.coords.accuracy;
             var _dst = getDistanceFromLatLonInKm(lat,lon,_lat,_lon);
                      
-            if (_dst > 0)
+            if (_dst >= acc / 1000.0)
             {
                 dst += _dst;
             }
@@ -98,6 +100,7 @@
         {
             var testout = document.getElementById("currpostest");
             testout.innerHTML = "Cnt: " + datacnt + "<br>";
+            testout.innerHTML += "Acc: " + acc + "<br>";
             testout.innerHTML += "Lat: " + lat + "<br>";
             testout.innerHTML += "Lon: " + lon + "<br>";
             testout.innerHTML += "Alt: " + alt + "<br>";
