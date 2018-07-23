@@ -88,6 +88,41 @@
 			svgPDD.innerHTML += '<polyline points="85,150 95,145 95,155" style="stroke:none;fill:yellow" />';
 			svgPDD.innerHTML += '<rect x="0" y="0" width="80" height="19" style="stroke:white;fill:black" />';			
 			svgPDD.innerHTML += '<text x="5" y="16" fill="magenta" id="valSpdTab">XXX km/h</text>';
+			
+			svgPDD.innerHTML += `<rect x="300" y="20" width="280" height="300" style="stroke:none;fill:gray" />"`;
+			svgPDD.innerHTML += `<line x1="300" y1="20" x2="200" y2="20" style="stroke:white;stroke-width:2" />`;
+			svgPDD.innerHTML += `<line x1="300" y1="299" x2="200" y2="299" style="stroke:white;stroke-width:2" />`;			
+			svgPDD.innerHTML += `<line x1="220" y1="20" x2="220" y2="300" style="stroke:white;stroke-width:2" />`;			
+			svgPDD.innerHTML += genAltTabObj();
+			svgPDD.innerHTML += '<rect x="220" y="0" width="80" height="19" style="stroke:none;fill:black" />';			
+			svgPDD.innerHTML += '<rect x="220" y="140" width="80" height="20" style="stroke:yellow;fill:black;stroke-width:2" />';		
+			svgPDD.innerHTML += '<text x="235" y="156" style="fill:lime;" id="valAltTab">XXXX</text>';		
+			
+		}
+		
+		function genAltTabObj()
+		{
+			var outElement = "<g id='altTab'>";
+			var a;
+			for (a = 0; a <= 5000; a += 50)
+			{
+				y = 300-a;
+				outElement += `<line x1="230" y1="${y}" x2="220" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
+				outElement += `<text x="260" y="${y+5}" fill="white">${a}</text>`;
+			}
+			outElement += "</g>";
+			
+			return outElement;
+		}
+		
+		function setAltTabCurrV(a)
+		{
+			document.getElementById("valAltTab").innerHTML = a;
+			
+			v = a;
+			v -= 150;
+		
+			document.getElementById("altTab").setAttribute("transform", `translate(0,${v})`);			
 		}
 		
 		function genSpeedTabObj()
@@ -97,7 +132,7 @@
 			for (v = 0; v <= 250; v += 10)
 			{
 				y = 300-4*v;
-				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:1;'/>`;
+				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
 				outElement += `<text x="40" y="${y+5}" fill="white">${v}</text>`;
 			}
 			
