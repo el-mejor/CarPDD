@@ -6,11 +6,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <link rel="stylesheet" href="style.css" />
     <title id="title1">Test</title>
+	<style>
+		* 
+		{
+			font-family:sans-serif;
+			font-size: 14px;		
+		}
+	</style>
 </head>
 <body>
-	<h1 id="title2">CarPDD</h1>
+	<!--<h1 id="title2">CarPDD</h1>
 	<div class="divcontainer">
 		<div class="divcol">         			
 			<h2>DEBUG: CURR DATA</h2>
@@ -43,19 +49,13 @@
 			<h2>PDD</h2>
 			<div class="showhide"><a class="showhidebutton"><img class="showimg" /></a></div>
 			<div class="divcont">
-                <div id="pdd"></div>
+                <div id="pdd" height="100vh"></div>
             </div>
         </div>
-    </div>
+    </div>-->
+	<div id="pdd" width="100vw" height="100vh"></div>
     
     <script>
-        var objs = document.getElementsByClassName("showhidebutton");
-	
-        for (i = 0; i < objs.length; i++)
-        {
-            objs[i].addEventListener("click", showHideBox);		
-        }
-        
         var lat;
         var lon;
         var alt;
@@ -77,7 +77,7 @@
 		{
 			var frame = document.getElementById(targetID);
 			frame.style.background = "black";
-			frame.innerHTML = `<svg width="90%" height="90%" viewbox="0 0 300 300" id="svgPDD" style="margin:10px"></svg>`;
+			frame.innerHTML = `<svg width="90vw" height="90vw" viewbox="0 0 300 300" id="svgPDD" style="margin:10px"></svg>`;
 			var svgPDD = document.getElementById("svgPDD");
 			svgPDD.innerHTML += `<rect x="0" y="20" width="80" height="300" style="stroke:none;fill:gray" />"`;
 			svgPDD.innerHTML += `<line x1="0" y1="20" x2="100" y2="20" style="stroke:white;stroke-width:2" />`;
@@ -86,18 +86,35 @@
 			svgPDD.innerHTML += genSpeedTabObj();
 			svgPDD.innerHTML += '<line x1="0" y1="150" x2="90" y2="150" style="stroke:yellow;stroke-width:2" />';
 			svgPDD.innerHTML += '<polyline points="85,150 95,145 95,155" style="stroke:none;fill:yellow" />';
-			svgPDD.innerHTML += '<rect x="0" y="0" width="80" height="19" style="stroke:white;fill:black" />';			
-			svgPDD.innerHTML += '<text x="5" y="16" fill="magenta" id="valSpdTab">XXX km/h</text>';
+			svgPDD.innerHTML += '<rect x="10" y="-200" width="180" height="219" style="stroke:none;fill:black" />';		
 			
-			svgPDD.innerHTML += `<rect x="300" y="20" width="280" height="300" style="stroke:none;fill:gray" />"`;
+			svgPDD.innerHTML += `<rect x="220" y="20" width="80" height="300" style="stroke:none;fill:gray" />"`;
 			svgPDD.innerHTML += `<line x1="300" y1="20" x2="200" y2="20" style="stroke:white;stroke-width:2" />`;
 			svgPDD.innerHTML += `<line x1="300" y1="299" x2="200" y2="299" style="stroke:white;stroke-width:2" />`;			
 			svgPDD.innerHTML += `<line x1="220" y1="20" x2="220" y2="300" style="stroke:white;stroke-width:2" />`;			
-			svgPDD.innerHTML += genAltTabObj();
+			svgPDD.innerHTML += genAltTabObj();			
 			svgPDD.innerHTML += '<rect x="220" y="0" width="80" height="19" style="stroke:none;fill:black" />';			
+			svgPDD.innerHTML += '<rect x="220" y="-200" width="80" height="219" style="stroke:none;fill:black" />';		
 			svgPDD.innerHTML += '<rect x="220" y="140" width="80" height="20" style="stroke:yellow;fill:black;stroke-width:2" />';		
 			svgPDD.innerHTML += '<text x="235" y="156" style="fill:lime;" id="valAltTab">XXXX</text>';		
+			svgPDD.innerHTML += '<rect x="0" y="300" width="500" height="219" style="stroke:none;fill:black" />';	
 			
+			svgPDD.innerHTML += '<rect x="0" y="0" width="80" height="19" style="stroke:white;fill:black" />';			
+			svgPDD.innerHTML += '<text x="5" y="16" fill="magenta" id="valSpdTab">XXX km/h</text>';			
+			svgPDD.innerHTML += '<rect x="80" y="0" width="140" height="19" style="stroke:white;fill:black" />';			
+			svgPDD.innerHTML += '<text x="105" y="16" fill="magenta" id="valDst">XXXX.XXX km</text>';
+			svgPDD.innerHTML += '<rect x="220" y="0" width="80" height="19" style="stroke:white;fill:black" />';			
+			svgPDD.innerHTML += '<text x="225" y="16" fill="magenta" id="valHdg">XXX °</text>';
+		}
+		
+		function setHdgCurrV(a)
+		{
+			document.getElementById("valHdg").innerHTML = a + " °";		
+		}
+		
+		function setDstCurrV(a)
+		{
+			document.getElementById("valDst").innerHTML = a + " km";		
 		}
 		
 		function genAltTabObj()
@@ -148,7 +165,7 @@
 			
 			var absLowLimit = 7;
 			y = 300 - 4 * absLowLimit; 
-			outElement += `<line x1="84" y1="300" x2="84" y2="${y}" style="stroke:orange;stroke-width:2;"/>`;
+			outElement += `<line x1="84" y1="450" x2="84" y2="${y}" style="stroke:orange;stroke-width:2;"/>`;
 			
 			outElement += "</g>";
 			
@@ -225,47 +242,11 @@
         }
 
         function display()
-        {
-            var testout = document.getElementById("currpostest");
-            testout.innerHTML = "Cnt: " + datacnt + "<br>";
-            testout.innerHTML += "Acc: " + acc + "<br>";
-            testout.innerHTML += "Lat: " + lat + "<br>";
-            testout.innerHTML += "Lon: " + lon + "<br>";
-            testout.innerHTML += "Alt: " + alt + "<br>";
-            testout.innerHTML += "Hdg: " + hdg + "<br>";
-            testout.innerHTML += "Spd: " + spd + "<br>";
-            testout.innerHTML += "Dst: " + dst + "<br>";
-            
-            document.getElementById("spdlimits").innerHTML = "";
-            for (var i = 0; i < spdlmts.length; i++)
-            {
-                document.getElementById("spdlimits").innerHTML += `<div  id="limit${spdlmts[i]}" style="width:50%;border:1px solid gray;margin:auto;margin-bottom:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;">${spdlmts[i]} km/h</div> `;
-                
-                if (spd <= spdlmts[i])
-                {
-                    document.getElementById("limit" + spdlmts[i]).style.background = "lime";
-                }
-                else if (spd > spdlmts[i] + tolerancespdlmt)
-                {
-                    document.getElementById("limit" + spdlmts[i]).style.background = "tomato";
-                }
-                else
-                {
-                    document.getElementById("limit" + spdlmts[i]).style.background = "gold";
-                }
-                
-                var currvals = "";
-                
-                currvals += showvalue(alt, "m", 1);
-                currvals += showvalue(dst, "km", 1000);
-                currvals += showvalue(spd, "km/h", 10);
-                currvals += showvalue(hdg, "°", 1);
-                
-                document.getElementById("curr").innerHTML = currvals;
-            }
-			
+        {   
 			setSpeedTabCurrV(Math.trunc(spd), vdelta * 10);
 			setAltTabCurrV(Math.trunc(alt));
+			setDstCurrV(Math.trunc(dst * 1000)/1000);
+			setHdgCurrV(Math.trunc(hdg));
         }
         
         function showvalue(value, unit, decimals) {
