@@ -38,7 +38,7 @@
         var datacnt = 0;
         
         var spdlmts = [ 30, 50, 60, 70, 80, 100, 120 ];
-        var tolerancespdlmt = 5;
+        var tolerancespdlmt = 10;
         
 		drawPDD("pdd");
 		
@@ -50,33 +50,37 @@
 			frame.style.background = "black";
 			frame.innerHTML = `<svg width="90vw" height="90vh" viewbox="0 0 300 ${h}" id="svgPDD" style="margin:10px"></svg>`;
 			var svgPDD = document.getElementById("svgPDD");
-			svgPDD.innerHTML += `<rect x="0" y="${upperrow}" width="80" height="${h}" style="stroke:none;fill:gray" />"`;
+			svgPDD.innerHTML += `<rect x="0" y="${upperrow}" width="80" height="${h}" style="stroke:none;fill:dimgray" />"`;
 			svgPDD.innerHTML += `<line x1="0" y1="${upperrow}" x2="100" y2="${upperrow}" style="stroke:white;stroke-width:2" />`;
 			svgPDD.innerHTML += `<line x1="0" y1="${h-1}" x2="100" y2="${h-1}" style="stroke:white;stroke-width:2" />`;			
 			svgPDD.innerHTML += `<line x1="80" y1="${upperrow}" x2="80" y2="${h}" style="stroke:white;stroke-width:2" />`;			
 			svgPDD.innerHTML += genSpeedTabObj();
-			svgPDD.innerHTML += `<line x1="0" y1="${h/2+upperrow}" x2="90" y2="${h/2+upperrow}" style="stroke:yellow;stroke-width:2" />`;
-			svgPDD.innerHTML += `<polyline points="85,${h/2+upperrow} 95,${h/2+upperrow-5} 95,${h/2+upperrow+5}" style="stroke:none;fill:yellow" />`;
-			svgPDD.innerHTML += `<rect x="10" y="-200" width="${200-upperrow}" height="219" style="stroke:none;fill:black" />`;		
+			svgPDD.innerHTML += `<line x1="0" y1="${h/2}" x2="90" y2="${h/2}" style="stroke:yellow;stroke-width:2" />`;
+			svgPDD.innerHTML += `<polyline points="85,${h/2} 95,${h/2-5} 95,${h/2+5}" style="stroke:none;fill:yellow" />`;
 			
-			svgPDD.innerHTML += `<rect x="220" y="${upperrow}" width="80" height="${h}" style="stroke:none;fill:gray" />"`;
+			svgPDD.innerHTML += `<rect x="220" y="${upperrow}" width="80" height="${h}" style="stroke:none;fill:dimgray" />"`;
 			svgPDD.innerHTML += `<line x1="300" y1="${upperrow}" x2="200" y2="${upperrow}" style="stroke:white;stroke-width:2" />`;
 			svgPDD.innerHTML += `<line x1="300" y1="${h-1}" x2="200" y2="${h-1}" style="stroke:white;stroke-width:2" />`;			
 			svgPDD.innerHTML += `<line x1="220" y1="${upperrow}" x2="220" y2="${h}" style="stroke:white;stroke-width:2" />`;			
 			svgPDD.innerHTML += genAltTabObj();			
 			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-1}" style="stroke:none;fill:black" />`;			
 			svgPDD.innerHTML += `<rect x="220" y="-200" width="80" height="${199+upperrow}" style="stroke:none;fill:black" />`;		
-			svgPDD.innerHTML += `<rect x="220" y="${h/2-upperrow/2+upperrow}" width="80" height="${upperrow}" style="stroke:yellow;fill:black;stroke-width:2" />`;		
-			svgPDD.innerHTML += `<text x="235" y="${h/2+6+upperrow}" style="fill:lime;font-size:1.5em" id="valAltTab">XXXX</text>`;		
+			svgPDD.innerHTML += `<rect x="220" y="${h/2-upperrow/2}" width="80" height="${upperrow}" style="stroke:yellow;fill:black;stroke-width:2" />`;		
+			svgPDD.innerHTML += `<text x="235" y="${h/2+6}" style="fill:lime;font-size:1.5em" id="valAltTab">XXXX</text>`;		
 			svgPDD.innerHTML += `<rect x="0" y="${h}" width="500" height="${199+upperrow}" style="stroke:none;fill:black" />`;	
 			
-			svgPDD.innerHTML += `<rect x="0" y="0" width="80" height="${upperrow-1}" style="stroke:white;fill:black" />`;			
-			svgPDD.innerHTML += `<text x="5" y="${upperrow-6}" style="fill:magenta;font-size:2em;" id="valSpdTab">XXX</text>`;			
-			svgPDD.innerHTML += `<rect x="80" y="0" width="140" height="${upperrow-1}" style="stroke:white;fill:black" />`;			
-			svgPDD.innerHTML += `<text x="85" y="${upperrow-6}" style="fill:magenta;font-size:2em;" id="valDst">XXXX.XXX</text>`;
-			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-1}" style="stroke:white;fill:black" />`;			
-			svgPDD.innerHTML += `<text x="225" y="${upperrow-6}" style="fill:magenta;font-size:2em;" id="valHdg">XXX</text>`;
-		}
+            svgPDD.innerHTML += `<rect x="0" y="-200" width="300" height="${199+upperrow}" style="stroke:none;fill:black" />`;
+            
+			svgPDD.innerHTML += `<rect x="0" y="0" width="80" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
+			svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valSpdTab">XXX</text>`;			
+			svgPDD.innerHTML += `<rect x="80" y="0" width="140" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
+			svgPDD.innerHTML += `<text x="85" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valDst">XXXX.XXX</text>`;
+			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
+			svgPDD.innerHTML += `<text x="225" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valHdg">XXX</text>`;
+		      
+            setSpeedTabCurrV(Math.trunc(123), -15);
+            setAltTabCurrV(Math.trunc(350));
+        }
 		
 		function setHdgCurrV(a)
 		{
@@ -101,7 +105,7 @@
             
 			for (a = 0; a <= 5000; a += 50)
 			{
-				y = h+upperrow-a;
+				y = h-a;
 				outElement += `<line x1="230" y1="${y}" x2="220" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
 				outElement += `<text x="260" y="${y+5}" style="fill:white;font-size:1.5em;">${a}</text>`;
 			}
@@ -115,7 +119,7 @@
 			document.getElementById("valAltTab").innerHTML = a;
 			
 			v = a;
-			v -= h/2 + upperrow;
+			v -= h/2;
 		
 			document.getElementById("altTab").setAttribute("transform", `translate(0,${v})`);			
 		}
@@ -125,21 +129,21 @@
 			var outElement = "<g id='spdTab'>";
 			var y;
             
-            for (v = 0; v <= 250; v += 1)
+            /*for (v = 0; v <= 250; v += 1)
 			{
-				y = h+upperrow-4*v;
+				y = h-4*v;
 				outElement += `<line x1="75" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:1;'/>`;				
-			}
+			}*/
             
             for (v = 0; v <= 250; v += 5)
 			{
-				y = h+upperrow-4*v;
+				y = h-4*v;
 				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:1;'/>`;				
 			}
             
 			for (v = 0; v <= 250; v += 10)
 			{
-				y = h+upperrow-4*v;
+				y = h-4*v;
 				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
 				outElement += `<text x="30" y="${y+5}" style="fill:white;font-size:1.5em;">${v}</text>`;
 			}
@@ -149,15 +153,24 @@
 			
 			for (var i = 0; i < markerV.length; i++)
 			{
-				y = h+upperrow-4*markerV[i];
+				y = h-4*markerV[i];
 				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:lime;stroke-width:2;'/>`;
 				outElement += `<text x="84" y="${y+5}" fill="lime">${markerID[i]}</text>`;
 			}
 			
 			var absLowLimit = 7;
-			y = h + upperrow - 4 * absLowLimit; 
-			outElement += `<line x1="84" y1="${h*2}" x2="84" y2="${y}" style="stroke:orange;stroke-width:2;"/>`;
+			y = h - 4 * absLowLimit; 
+			outElement += `<line x1="84" y1="${h}" x2="84" y2="${y}" style="stroke:orange;stroke-width:4;"/>`;
+            
+            y = h - 4 * 0; 
+			outElement += `<line x1="84" y1="${h*2}" x2="84" y2="${y}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;
 			
+            var currentHighLimit = 80;
+            var y1 = h - 4 * currentHighLimit; 
+            var y2 = h - 4 * (currentHighLimit + tolerancespdlmt);
+            outElement += `<line x1="84" y1="${y1}" x2="84" y2="${y2}" style="stroke:orange;stroke-width:4;"/>`;
+			outElement += `<line x1="84" y1="${y-1000}" x2="84" y2="${y2}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;
+            
 			outElement += "</g>";
 			
 			return outElement;
@@ -178,7 +191,7 @@
 			}
 			
 			var svgPDD = document.getElementById("svgPDD");
-			svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2+upperrow}" x2="70" y2="${h/2+upperrow+(vdelta*4)}" style="stroke:yellow;stroke-width:2;" />`;
+			svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(vdelta*4)}" style="stroke:yellow;stroke-width:4;" />`;
 			
 		}
 		
