@@ -264,8 +264,8 @@
                 document.getElementById("curr").innerHTML = currvals;
             }
 			
-			setSpeedTabCurrV(spd, vdelta * 10);
-			setAltTabCurrV(alt);
+			setSpeedTabCurrV(Math.trunc(spd), vdelta * 10);
+			setAltTabCurrV(Math.trunc(alt));
         }
         
         function showvalue(value, unit, decimals) {
