@@ -24,7 +24,7 @@
 	<div id="pdd" width="100vw" height="100vh"></div>
     
     <script>
-        var h = 450;
+        var h = 600;
         var upperrow = 40;
         
         var lat;
@@ -48,7 +48,7 @@
 		{   
 			var frame = document.getElementById(targetID);
 			frame.style.background = "black";
-			frame.innerHTML = `<svg width="90vw" height="90vw" viewbox="0 0 300 ${h}" id="svgPDD" style="margin:10px"></svg>`;
+			frame.innerHTML = `<svg width="90vw" height="90vh" viewbox="0 0 300 ${h}" id="svgPDD" style="margin:10px"></svg>`;
 			var svgPDD = document.getElementById("svgPDD");
 			svgPDD.innerHTML += `<rect x="0" y="${upperrow}" width="80" height="${h}" style="stroke:none;fill:gray" />"`;
 			svgPDD.innerHTML += `<line x1="0" y1="${upperrow}" x2="100" y2="${upperrow}" style="stroke:white;stroke-width:2" />`;
@@ -67,31 +67,38 @@
 			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-1}" style="stroke:none;fill:black" />`;			
 			svgPDD.innerHTML += `<rect x="220" y="-200" width="80" height="${199+upperrow}" style="stroke:none;fill:black" />`;		
 			svgPDD.innerHTML += `<rect x="220" y="${h/2-upperrow/2+upperrow}" width="80" height="${upperrow}" style="stroke:yellow;fill:black;stroke-width:2" />`;		
-			svgPDD.innerHTML += `<text x="235" y="${h/2+6+upperrow}" style="fill:lime;" id="valAltTab">XXXX</text>`;		
+			svgPDD.innerHTML += `<text x="235" y="${h/2+6+upperrow}" style="fill:lime;font-size:1.5em" id="valAltTab">XXXX</text>`;		
 			svgPDD.innerHTML += `<rect x="0" y="${h}" width="500" height="${199+upperrow}" style="stroke:none;fill:black" />`;	
 			
-			svgPDD.innerHTML += '<rect x="0" y="0" width="80" height="${upperrow-1}" style="stroke:white;fill:black" />';			
-			svgPDD.innerHTML += '<text x="5" y="${upperrow-4}" fill="magenta" id="valSpdTab">XXX km/h</text>';			
-			svgPDD.innerHTML += '<rect x="80" y="0" width="140" height="${upperrow-1}" style="stroke:white;fill:black" />';			
-			svgPDD.innerHTML += '<text x="105" y="${upperrow-4}" fill="magenta" id="valDst">XXXX.XXX km</text>';
-			svgPDD.innerHTML += '<rect x="220" y="0" width="80" height="${upperrow-1}" style="stroke:white;fill:black" />';			
-			svgPDD.innerHTML += '<text x="225" y="${upperrow-4}" fill="magenta" id="valHdg">XXX °</text>';
+			svgPDD.innerHTML += `<rect x="0" y="0" width="80" height="${upperrow-1}" style="stroke:white;fill:black" />`;			
+			svgPDD.innerHTML += `<text x="5" y="${upperrow-6}" style="fill:magenta;font-size:2em;" id="valSpdTab">XXX</text>`;			
+			svgPDD.innerHTML += `<rect x="80" y="0" width="140" height="${upperrow-1}" style="stroke:white;fill:black" />`;			
+			svgPDD.innerHTML += `<text x="85" y="${upperrow-6}" style="fill:magenta;font-size:2em;" id="valDst">XXXX.XXX</text>`;
+			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-1}" style="stroke:white;fill:black" />`;			
+			svgPDD.innerHTML += `<text x="225" y="${upperrow-6}" style="fill:magenta;font-size:2em;" id="valHdg">XXX</text>`;
 		}
 		
 		function setHdgCurrV(a)
 		{
-			document.getElementById("valHdg").innerHTML = a + " °";		
+			document.getElementById("valHdg").innerHTML = a + "";		
 		}
 		
 		function setDstCurrV(a)
 		{
-			document.getElementById("valDst").innerHTML = a + " km";		
+			document.getElementById("valDst").innerHTML = a + "";		
 		}
 		
 		function genAltTabObj()
 		{
 			var outElement = "<g id='altTab'>";
 			var a;
+            
+            for (a = 0; a <= 5000; a += 10)
+			{
+				y = h+upperrow-a;
+				outElement += `<line x1="225" y1="${y}" x2="220" y2="${y}" style='stroke:white;stroke-width:1;'/>`;
+			}
+            
 			for (a = 0; a <= 5000; a += 50)
 			{
 				y = h+upperrow-a;
@@ -117,11 +124,24 @@
 		{
 			var outElement = "<g id='spdTab'>";
 			var y;
+            
+            for (v = 0; v <= 250; v += 1)
+			{
+				y = h+upperrow-4*v;
+				outElement += `<line x1="75" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:1;'/>`;				
+			}
+            
+            for (v = 0; v <= 250; v += 5)
+			{
+				y = h+upperrow-4*v;
+				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:1;'/>`;				
+			}
+            
 			for (v = 0; v <= 250; v += 10)
 			{
 				y = h+upperrow-4*v;
 				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
-				outElement += `<text x="40" y="${y+5}" style="fill:white;font-size:1.5em;">${v}</text>`;
+				outElement += `<text x="30" y="${y+5}" style="fill:white;font-size:1.5em;">${v}</text>`;
 			}
 			
 			var markerV = [ 15, 25, 38, 45, 55 ];
@@ -145,7 +165,7 @@
 		
 		function setSpeedTabCurrV(v, vdelta)
 		{
-			document.getElementById("valSpdTab").innerHTML = v + " km/h";
+			document.getElementById("valSpdTab").innerHTML = v + "";
 			
 			v = v * 4;
 			v -= h/2;
