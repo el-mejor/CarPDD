@@ -43,9 +43,15 @@
         var currAltTabVal = 0.0;
         var currAltTabValStep = 0.0;
         
+        var markerV = [ 15, 25, 38, 45, 55 ];
+        var markerID = [ "2", "3", "4", "5", "6" ];
+        
         var spdlmts = [ 30, 50, 60, 70, 80, 100, 120 ];
-        var currSpdLimit = 80;
+        var currSpdLimit = spdlmts[0];
         var tolerancespdlmt = 5;
+        
+        var maxSpeed = 183;
+        var idealSpeed = 130;
         
 		drawPDD("pdd");
 		
@@ -88,10 +94,32 @@
 			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
 			svgPDD.innerHTML += `<text x="225" y="${upperrow-10}" style="fill:red;font-size:2em;" id="valAcc">XXX</text>`;
 		      
+            for (var i = 0; i < spdlmts.length; i++)
+            {
+                var _id = "spdlmt" + spdlmts[i];
+                var _y = upperrow + 40 + 40 * i;
+                var _x = 120;                
+                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-32}" width="80" height="40" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
+                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${spdlmts[i]}</text>`;
+            }
+            
             showInvalidCross(true);
             
+            selectSpdLimit(spdlmts[0]);            
             setSpeedTabCurrV();            
             setAltTabCurrV();
+        }
+        
+        function selectSpdLimit(v)
+        {            
+            for (var i = 0; i < spdlmts.length; i++)
+            {
+                var _id = "spdlmt" + spdlmts[i];
+                document.getElementById(_id).style.fill = "gray";
+            }
+            
+            currSpdLimit = v;
+            document.getElementById("spdlmt" + v).style.fill = "magenta";
         }
 		
 		function setAccCurrV(a)
@@ -191,14 +219,11 @@
 				outElement += `<text x="30" y="${y+5}" style="fill:white;font-size:1.5em;">${v}</text>`;
 			}
 			
-			var markerV = [ 15, 25, 38, 45, 55 ];
-			var markerID = [ "2", "3", "4", "5", "6" ];
-			
 			for (var i = 0; i < markerV.length; i++)
 			{
 				y = h-4*markerV[i];
-				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:lime;stroke-width:2;'/>`;
-				outElement += `<text x="84" y="${y+5}" fill="lime">${markerID[i]}</text>`;
+				outElement += `<line x1="70" y1="${y}" x2="85" y2="${y}" style='stroke:lime;stroke-width:2;'/>`;
+				outElement += `<text x="87" y="${y+5}" fill="lime">${markerID[i]}</text>`;
 			}
 			
 			var absLowLimit = 7;
@@ -207,7 +232,15 @@
             
             y = h - 4 * 0; 
 			outElement += `<line x1="84" y1="${h*2}" x2="84" y2="${y}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;
-			            
+            outElement += `<line x1="88" y1="${h*2}" x2="88" y2="${y}" style="stroke:red;stroke-width:2;"/>`;
+
+            y = h - 4 * maxSpeed;
+            outElement += `<line x1="65" y1="${y}" x2="75" y2="${y}" style="stroke:orange;stroke-width:2;" />`;
+            outElement += `<line x1="65" y1="${y-4}" x2="75" y2="${y-4}" style="stroke:orange;stroke-width:2;" />`;
+            
+            y = h - 4 * idealSpeed;
+            outElement += `<circle cx="80" cy="${y}" r="6" style="stroke:lime;stroke-width:4;fill:none" />`;
+            
 			outElement += "</g>";
 			
 			return outElement;
@@ -254,9 +287,10 @@
 
                 var outElement;
                 
-                outElement += `<g id="speedlimit">`;
+                outElement += `<g id="spdlimit">`;
                 outElement += `<line id="spdlimit1" x1="84" y1="${y2}" x2="84" y2="${y3}" style="stroke:orange;stroke-width:4;"/>`;
-                outElement += `<line id="spdlimit2" x1="84" y1="${y-1000}" x2="84" y2="${y3}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;            
+                outElement += `<line id="spdlimit2" x1="84" y1="${y-1000}" x2="84" y2="${y3}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;    
+                outElement += `<line id="spdlimit2" x1="88" y1="${y-1000}" x2="88" y2="${y3}" style="stroke:red;stroke-width:2;" />`; 
                 outElement += `<polyline id="spdlimit3" points="85,${y1} 100,${y1-8} 100,${y1+8} 85,${y1}" style="stroke:magenta;fill:none;stroke-width:2;" />`;
                 outElement += `</g>`;
                 
