@@ -34,7 +34,8 @@
         var spd = 0;
 		var vdelta = 0;
         var acc = 999;
-        var dst = 0;
+        var dst = parseInt(localStorage.getItem("idis_total_dist"));
+        if (!dst) {dst = 0;}
         var datacnt = 0;
         
         var currSpdTabVal = 300;
@@ -364,6 +365,7 @@
             if (_dst >= acc / 1000.0)
             {                
                 dst += _dst;
+                localStorage.setItem("idis_total_dist", dst)
                 lat = _lat;
                 lon = _lon;
             }
