@@ -27,21 +27,31 @@
         var h = 450;
         var upperrow = 40;
         
-        var lat;
-        var lon;
-        var alt;
-        var hdg;
-        var spd;
-		var vdelta;
-        var acc;
+        var lat = 0;
+        var lon = 0;
+        var alt = 0;
+        var hdg = 0;
+        var spd = 0;
+		var vdelta = 0;
+        var acc = 999;
         var dst = 0;
         var datacnt = 0;
         
+        var currSpdTabVal = 0.0;
+        var currSpdTabValStep = 0.0;
+        
+        var currAltTabVal = 0.0;
+        var currAltTabValStep = 0.0;
+        
         var spdlmts = [ 30, 50, 60, 70, 80, 100, 120 ];
+        var currSpdLimit = 80;
         var tolerancespdlmt = 5;
         
 		drawPDD("pdd");
 		
+        setInterval(function() { spd = (Math.random() * 20.0 + 75.0); }, 1000);
+        setInterval(function() { alt = Math.random() * 1000; console.log(alt);  }, 10000);
+        
         getpos();
         
 		function drawPDD(targetID)
@@ -72,19 +82,43 @@
             svgPDD.innerHTML += `<rect x="0" y="-200" width="300" height="${199+upperrow}" style="stroke:none;fill:black" />`;
             
 			svgPDD.innerHTML += `<rect x="0" y="0" width="80" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
-			svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valSpdTab">XXX</text>`;			
+			svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:lime;font-size:2em;" id="valSpdTab">XXX</text>`;			
 			svgPDD.innerHTML += `<rect x="80" y="0" width="140" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
-			svgPDD.innerHTML += `<text x="85" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valDst">XXXX.XXX</text>`;
+			svgPDD.innerHTML += `<text x="85" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valDst">XXXX.X</text>`;
 			svgPDD.innerHTML += `<rect x="220" y="0" width="80" height="${upperrow-5}" style="stroke:white;fill:black" />`;			
-			svgPDD.innerHTML += `<text x="225" y="${upperrow-10}" style="fill:magenta;font-size:2em;" id="valHdg">XXX</text>`;
+			svgPDD.innerHTML += `<text x="225" y="${upperrow-10}" style="fill:red;font-size:2em;" id="valAcc">XXX</text>`;
 		      
-            setSpeedTabCurrV(Math.trunc(123), -15);
-            setAltTabCurrV(Math.trunc(350));
+            showInvalidCross(true);
+            
+            setSpeedTabCurrV();            
+            setAltTabCurrV();
         }
 		
-		function setHdgCurrV(a)
+		function setAccCurrV(a)
 		{
-			document.getElementById("valHdg").innerHTML = a + "";		
+            var svgPDD = document.getElementById("svgPDD");
+            
+            if (document.getElementById("valAcc"))
+            { document.getElementById("valAcc").remove();}
+            
+            var color = "red";
+            
+            if (a < 11)
+            { color = "orange"; }
+            
+            if (a < 6)
+            { color = "lime"; }
+            
+            if (a > 10)
+            {
+                showInvalidCross(true);       
+            }
+            else
+            {
+                showInvalidCross(false);       
+            }
+            
+            svgPDD.innerHTML += `<text x="225" y="${upperrow-10}" style="fill:${color};font-size:2em;" id="valAcc">${a}</text>`;
 		}
 		
 		function setDstCurrV(a)
@@ -97,11 +131,11 @@
 			var outElement = "<g id='altTab'>";
 			var a;
             
-            for (a = 0; a <= 5000; a += 10)
+            /*for (a = 0; a <= 5000; a += 10)
 			{
 				y = h+upperrow-a;
 				outElement += `<line x1="225" y1="${y}" x2="220" y2="${y}" style='stroke:white;stroke-width:1;'/>`;
-			}
+			}*/
             
 			for (a = 0; a <= 5000; a += 50)
 			{
@@ -114,14 +148,23 @@
 			return outElement;
 		}
 		
-		function setAltTabCurrV(a)
+		function setAltTabCurrV()
 		{
-			document.getElementById("valAltTab").innerHTML = a;
-			
-			v = a;
-			v -= h/2;
-		
-			document.getElementById("altTab").setAttribute("transform", `translate(0,${v})`);			
+            setTimeout(function() {
+                currAltTabValStep = (alt - currAltTabVal) / 10;
+
+                currAltTabVal += currAltTabValStep;
+
+                var _v = Math.trunc(currAltTabVal);
+
+                document.getElementById("valAltTab").innerHTML = _v;
+
+                _v -= h/2;
+
+                document.getElementById("altTab").setAttribute("transform", `translate(0,${_v})`);			
+                
+                setAltTabCurrV();
+            }, 10);
 		}
 		
 		function genSpeedTabObj()
@@ -164,47 +207,79 @@
             
             y = h - 4 * 0; 
 			outElement += `<line x1="84" y1="${h*2}" x2="84" y2="${y}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;
-			
-            var currentHighLimit = 80;
-            var y1 = h - 4 * currentHighLimit; 
-            var y2 = h - 4 * (currentHighLimit + tolerancespdlmt);  
-            var y3 = h - 4 * (currentHighLimit + 2 * tolerancespdlmt);            
-            
-            /*if (document.getElementById("spdlimit1"))
-            { document.getElementById("spdlimit1").remove(); }
-            if (document.getElementById("spdlimit2"))
-            { document.getElementById("spdlimit2").remove(); }
-            if (document.getElementById("spdlimit3"))
-            { document.getElementById("spdlimit3").remove(); }*/
-            
-            outElement += `<line id="spdlimit1" x1="84" y1="${y2}" x2="84" y2="${y3}" style="stroke:orange;stroke-width:4;"/>`;
-			outElement += `<line id="spdlimit2" x1="84" y1="${y-1000}" x2="84" y2="${y3}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;
-            
-            outElement += `<polyline id="spdlimit3" points="85,${y1} 100,${y1-8} 100,${y1+8} 85,${y1}" style="stroke:magenta;fill:none;stroke-width:2;" />`;
-            
+			            
 			outElement += "</g>";
 			
 			return outElement;
 		}
-		
-		function setSpeedTabCurrV(v, vdelta)
+        
+		function setSpeedTabCurrV()
 		{
-			document.getElementById("valSpdTab").innerHTML = v + "";
-			
-			v = v * 4;
-			v -= h/2;
-		
-			document.getElementById("spdTab").setAttribute("transform", `translate(0,${v})`);
-			
-			if (document.getElementById("vdelta") != null)
-			{
-				document.getElementById("vdelta").remove();
-			}
-			
-			var svgPDD = document.getElementById("svgPDD");
-			svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(vdelta*4)}" style="stroke:yellow;stroke-width:4;" />`;
-			
+            setTimeout(function() {
+                var _d = vdelta * 5;            
+                currSpdTabValStep = (spd - currSpdTabVal) / 10;
+
+                currSpdTabVal += currSpdTabValStep;
+
+                var _v = Math.trunc(currSpdTabVal);
+
+                document.getElementById("valSpdTab").innerHTML = _v + "";
+
+                _v = _v * 4;
+                _v -= h/2;
+
+                document.getElementById("spdTab").setAttribute("transform", `translate(0,${_v})`);
+                
+                if (document.getElementById("vdelta"))
+                { document.getElementById("vdelta").remove(); }
+
+                var svgPDD = document.getElementById("svgPDD");
+                svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(_d*4)}" style="stroke:yellow;stroke-width:4;" />`;
+                
+                var y1 = h - 4 * currSpdLimit; 
+                var y2 = h - 4 * (currSpdLimit + tolerancespdlmt);  
+                var y3 = h - 4 * (currSpdLimit + 2 * tolerancespdlmt);            
+
+                var _color = "red";
+                if (currSpdTabVal < currSpdLimit + 2 * tolerancespdlmt) { _color = "orange"; }
+                if (currSpdTabVal < currSpdLimit + tolerancespdlmt) { _color = "lime"; }
+                
+                if (document.getElementById("valSpdTab"))
+                { document.getElementById("valSpdTab").remove(); }
+                
+                svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:${_color};font-size:2em;" id="valSpdTab">${Math.trunc(currSpdTabVal)}</text>`;
+                
+                if (document.getElementById("spdlimit"))
+                { document.getElementById("spdlimit").remove(); }            
+
+                var outElement;
+                
+                outElement += `<g id="speedlimit">`;
+                outElement += `<line id="spdlimit1" x1="84" y1="${y2}" x2="84" y2="${y3}" style="stroke:orange;stroke-width:4;"/>`;
+                outElement += `<line id="spdlimit2" x1="84" y1="${y-1000}" x2="84" y2="${y3}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;            
+                outElement += `<polyline id="spdlimit3" points="85,${y1} 100,${y1-8} 100,${y1+8} 85,${y1}" style="stroke:magenta;fill:none;stroke-width:2;" />`;
+                outElement += `</g>`;
+                
+                document.getElementById("spdTab").innerHTML += outElement;
+            
+                setSpeedTabCurrV();
+            }, 10);
 		}
+        
+        function showInvalidCross(v)
+        {
+            if (v)
+            {
+                var svgPDD = document.getElementById("svgPDD");
+                
+                svgPDD.innerHTML += `<g id="invalidCross"><line x1="0" y1="${h/2-40}" x2="80" y2="${h/2+40}" style="stroke:red;stroke-width:4;" /><line x1="0" y1="${h/2+40}" x2="80" y2="${h/2-40}" style="stroke:red;stroke-width:4;" /></g>`
+            }
+            else
+            {
+                if (document.getElementById("invalidCross"))
+                { document.getElementById("invalidCross").remove(); }
+            }            
+        }
 		
 		
         function getpos()
@@ -258,29 +333,15 @@
 
         function display()
         {   
-			setSpeedTabCurrV(Math.trunc(spd), vdelta * 5);
-			setAltTabCurrV(Math.trunc(alt));
-			setDstCurrV(Math.trunc(dst * 1000)/1000);
-			setHdgCurrV(Math.trunc(hdg));
-        }
-        
-        function showvalue(value, unit, decimals) {
-            var out;
-            if (value)
-            { out = `<div style="width:50%;border:1px solid gray;margin:auto;margin-bottom:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;background:gray;color:lime;">${Math.trunc(value*decimals)/decimals} ${unit}</div>`; }
-            else
-            { out = `<div style="width:50%;border:1px solid gray;margin:auto;margin-bottom:5px;padding:5px;border-radius:5px;text-align:center;font-size:2em;background:gray;color:red;"> XXXX ${unit}</div>`; }
-            return out;			
-			
+            showInvalidCross(false);
+			setDstCurrV(Math.trunc(dst * 10)/10);
+			setAccCurrV(Math.trunc(acc));
         }
         
         function errorPosition()
         {
-            document.getElementById("currpostest").innerHTML = "No Data!";
-            
-            document.getElementById("spdlimits").innerHTML = "No Data!";
-            
-            document.getElementById("curr").innerHTML = "No Data!";
+            setAccCurrV(Math.trunc(999));            
+            showInvalidCross(true);
         }
         
         function showHideBox()
