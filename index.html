@@ -24,6 +24,8 @@
 	<div id="pdd" width="100vw" height="100vh"></div>
     
     <script>
+        var speedtabzoomfactor = 8;
+        
         var h = 450;
         var upperrow = 40;
         
@@ -161,7 +163,7 @@
 			var outElement = "<g id='altTab'>";
 			var a;
             
-            /*for (a = 0; a <= 5000; a += 10)
+            /*for (a = -1000; a <= 15000; a += 10)
 			{
 				y = h+upperrow-a;
 				outElement += `<line x1="225" y1="${y}" x2="220" y2="${y}" style='stroke:white;stroke-width:1;'/>`;
@@ -173,11 +175,11 @@
 				outElement += `<line x1="220" y1="${y+16}" x2="300" y2="${y}" style='stroke:orange;stroke-width:2;'/>`;				
 			}
             
-			for (a = 0; a <= 5000; a += 50)
+			for (a = -1000; a <= 15000; a += 50)
 			{
 				y = h-a;
 				outElement += `<line x1="230" y1="${y}" x2="220" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
-				outElement += `<text x="260" y="${y+5}" style="fill:white;font-size:1.5em;">${a}</text>`;
+				outElement += `<text x="240" y="${y+5}" style="fill:white;font-size:1.5em;">${a}</text>`;
 			}
 			outElement += "</g>";
 			
@@ -205,42 +207,42 @@
             
             for (v = 0; v > -100; v -= 4)
 			{
-				y = h-4*v;
+				y = h-speedtabzoomfactor*v;
 				outElement += `<line x1="0" y1="${y+16}" x2="80" y2="${y}" style='stroke:orange;stroke-width:2;'/>`;				
 			}
             
-            for (v = 0; v <= 250; v += 5)
+            for (v = 0; v <= 1250; v += 5)
 			{
-				y = h-4*v;
+				y = h-speedtabzoomfactor*v;
 				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:1;'/>`;				
 			}
             
-			for (v = 0; v <= 250; v += 10)
+			for (v = 0; v <= 1250; v += 10)
 			{
-				y = h-4*v;
+				y = h-speedtabzoomfactor*v;
 				outElement += `<line x1="70" y1="${y}" x2="80" y2="${y}" style='stroke:white;stroke-width:2;'/>`;
 				outElement += `<text x="30" y="${y+5}" style="fill:white;font-size:1.5em;">${v}</text>`;
 			}
 			
 			for (var i = 0; i < markerV.length; i++)
 			{
-				y = h-4*markerV[i];
+				y = h-speedtabzoomfactor*markerV[i];
 				outElement += `<line x1="70" y1="${y}" x2="85" y2="${y}" style='stroke:lime;stroke-width:2;'/>`;
 				outElement += `<text x="87" y="${y+5}" fill="lime">${markerID[i]}</text>`;
 			}
 			
 			var absLowLimit = 7;
-			y = h - 4 * absLowLimit; 
+			y = h - speedtabzoomfactor * absLowLimit; 
 			outElement += `<line x1="84" y1="${h}" x2="84" y2="${y}" style="stroke:orange;stroke-width:4;"/>`;
             
-            y = h - 4 * 0; 
+            y = h - speedtabzoomfactor * 0; 
 			outElement += `<line x1="84" y1="${h*2}" x2="84" y2="${y}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;
             outElement += `<line x1="88" y1="${h*2}" x2="88" y2="${y}" style="stroke:red;stroke-width:2;"/>`;
-            y = h - 4 * maxSpeed;
+            y = h - speedtabzoomfactor * maxSpeed;
             outElement += `<line x1="65" y1="${y}" x2="75" y2="${y}" style="stroke:orange;stroke-width:2;" />`;
             outElement += `<line x1="65" y1="${y-4}" x2="75" y2="${y-4}" style="stroke:orange;stroke-width:2;" />`;
             
-            y = h - 4 * idealSpeed;
+            y = h - speedtabzoomfactor * idealSpeed;
             outElement += `<circle cx="80" cy="${y}" r="6" style="stroke:lime;stroke-width:4;fill:none" />`;
             
 			outElement += "</g>";
@@ -256,18 +258,19 @@
                 currSpdTabVal += currSpdTabValStep;
                 var _v = Math.trunc(currSpdTabVal);
                 document.getElementById("valSpdTab").innerHTML = _v + "";
-                _v = _v * 4;
+                _v = _v * speedtabzoomfactor;
                 _v -= h/2;
                 document.getElementById("spdTab").setAttribute("transform", `translate(0,${_v})`);
                 
                 if (document.getElementById("vdelta"))
                 { document.getElementById("vdelta").remove(); }
                 var svgPDD = document.getElementById("svgPDD");
-                svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(_d*4)}" style="stroke:yellow;stroke-width:4;" />`;
+                svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(_d*speedtabzoomfactor)}" style="stroke:yellow;stroke-width:4;" />`;
+                /*svgPDD.innerHTML += `<path d="M70 ${h/2+(_d*speedtabzoomfactor)} l-5 0 l5 -10 l5 10 l-5 10 l-5 -10" style="stroke:none;fill:yellow;"/>`;*/
                 
-                var y1 = h - 4 * currSpdLimit; 
-                var y2 = h - 4 * (currSpdLimit + tolerancespdlmt);  
-                var y3 = h - 4 * (currSpdLimit + 2 * tolerancespdlmt);            
+                var y1 = h - speedtabzoomfactor * currSpdLimit; 
+                var y2 = h - speedtabzoomfactor * (currSpdLimit + tolerancespdlmt);  
+                var y3 = h - speedtabzoomfactor * (currSpdLimit + 2 * tolerancespdlmt);            
                 var _color = "red";
                 if (currSpdTabVal < currSpdLimit + 2 * tolerancespdlmt) { _color = "orange"; }
                 if (currSpdTabVal < currSpdLimit + tolerancespdlmt) { _color = "lime"; }
