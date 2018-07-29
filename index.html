@@ -24,6 +24,8 @@
 	<div id="pdd" width="100vw" height="100vh"></div>
     
     <script>
+        var test = false;
+        
         var speedtabzoomfactor = 8;
         
         var h = 450;
@@ -53,7 +55,7 @@
         var maxSpeed = 183;
         var idealSpeed = 130;
         
-        var spdlmts = [ 30, 50, 60, 70, 80, 100, 120, maxSpeed ];
+        var spdlmts = [ 30, 50, 60, 70, 80, 100, 120, -1 ];
         var currSpdLimit = spdlmts[0];
         var tolerancespdlmt = 5;
         
@@ -61,8 +63,11 @@
         
 		drawPDD("pdd");
 		
-        /*setInterval(function() { spd = (Math.random() * 25 + 173); }, 1000);
-        setInterval(function() { alt = Math.random() * 1000; console.log(alt);  }, 10000);*/
+        if (test)
+        {
+            setInterval(function() { spd = (Math.random() * 25 + 173); }, 1000);
+            setInterval(function() { alt = Math.random() * 1000; console.log(alt);  }, 10000);
+        }
         
         getpos();
         
@@ -104,9 +109,14 @@
             {
                 var _id = "spdlmt" + spdlmts[i];
                 var _y = upperrow + 40 + 40 * i;
-                var _x = 120;                
+                var _x = 120;     
+                var _caption = spdlmts[i];
+                if (_caption == -1)
+                {
+                    _caption = "off";
+                }
                 svgPDD.innerHTML += `<rect x="${_x}" y="${_y-32}" width="80" height="40" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
-                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${spdlmts[i]}</text>`;
+                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
             }
             
             showInvalidCross(true);
@@ -125,6 +135,9 @@
             }
             
             currSpdLimit = v;
+            if (currSpdLimit == -1)
+            { currSpdLimit = 1000; }
+            
             document.getElementById("spdlmt" + v).style.fill = "magenta";
         }
 		
