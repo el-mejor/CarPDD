@@ -29,7 +29,7 @@
         
         
         
-        var test = false;
+        var test = true;
         
         var speedtabzoomfactor = 6;
         
@@ -70,9 +70,9 @@
 		
         if (test)
         {
-            setInterval(function() { spd = (Math.random() * 25 + 173); }, 1000);
-            setInterval(function() { hdg = (Math.random() * 25 + 90); }, 1000);
-            setInterval(function() { alt = Math.random() * 1000; }, 10000);
+            setInterval(function() { spd = (Math.random() * 25 + 173); }, 5000);
+            setInterval(function() { hdg = (Math.random() * 25 + 90); }, 5000);
+            setInterval(function() { alt = Math.random() * 1000; }, 5000);
         }
         
         getpos();
@@ -280,7 +280,7 @@
                 document.getElementById("altTab").setAttribute("transform", `translate(0,${_v})`);			
                 
                 setAltTabCurrV();
-            }, 10);
+            }, 100);
 		}
 		
 		function genSpeedTabObj()
@@ -337,10 +337,9 @@
 		{
             setTimeout(function() {
                 var _d = vdelta * 5;            
-                currSpdTabValStep = (spd - currSpdTabVal) / 10;
+                currSpdTabValStep = (spd - currSpdTabVal) / 3;
                 currSpdTabVal += currSpdTabValStep;
-                var _v = Math.trunc(currSpdTabVal);
-                document.getElementById("valSpdTab").innerHTML = _v + "";
+                var _v = Math.trunc(currSpdTabVal);                
                 _v = _v * speedtabzoomfactor;
                 _v -= h/2;
                 document.getElementById("spdTab").setAttribute("transform", `translate(0,${_v})`);
@@ -361,7 +360,7 @@
                 if (document.getElementById("valSpdTab"))
                 { document.getElementById("valSpdTab").remove(); }
                 
-                svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:${_color};font-size:2em;" id="valSpdTab">${Math.trunc(currSpdTabVal)}</text>`;
+                svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:${_color};font-size:2em;" id="valSpdTab">${Math.trunc(spd)}</text>`;
                 
                 if (document.getElementById("spdlimit"))
                 { document.getElementById("spdlimit").remove(); }            
@@ -377,7 +376,7 @@
                 document.getElementById("spdTab").innerHTML += outElement;
             
                 setSpeedTabCurrV();
-            }, 10);
+            }, 100);
 		}
         
         function showInvalidCross(v)
