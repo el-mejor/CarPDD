@@ -337,8 +337,8 @@
 		{
             setTimeout(function() {
                 var _d = vdelta * 5;            
-                currSpdTabValStep = (spd - currSpdTabVal) / 3;
-                currSpdTabVal += currSpdTabValStep;
+                /*currSpdTabValStep = (spd - currSpdTabVal) / 3;*/
+                currSpdTabVal = spd; /*+= currSpdTabValStep;*/
                 var _v = Math.trunc(currSpdTabVal);                
                 _v = _v * speedtabzoomfactor;
                 _v -= h/2;
