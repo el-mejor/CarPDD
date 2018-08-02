@@ -335,10 +335,10 @@
         
 		function setSpeedTabCurrV()
 		{
-            setTimeout(function() {
+            setTimeout(function() {		    
                 var _d = vdelta * 5;            
-                /*currSpdTabValStep = (spd - currSpdTabVal) / 3;*/
-                currSpdTabVal = spd; /*+= currSpdTabValStep;*/
+                currSpdTabValStep = (spd - currSpdTabVal) / 3;
+                currSpdTabVal += currSpdTabValStep;
                 var _v = Math.trunc(currSpdTabVal);                
                 _v = _v * speedtabzoomfactor;
                 _v -= h/2;
@@ -426,6 +426,8 @@
 			{
 				vdelta = 0;
 			}
+		if(!spd)
+		{ spd = 0; }
 				
             acc = position.coords.accuracy;
             
