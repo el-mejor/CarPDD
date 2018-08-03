@@ -208,7 +208,15 @@
             
             currSpdLimit = v;
             if (currSpdLimit == -1)
-            { currSpdLimit = 1000; }
+            { 
+                currSpdLimit = 1000;
+                if (sound)
+                {
+                    var _snd = document.getElementById("apoffsnd");
+                    _snd.play();
+                }
+            
+            }
             
             document.getElementById("spdlmt" + v).style.fill = "magenta";
         }
@@ -465,7 +473,7 @@
                 lon = _lon;
             }
             
-            if (currSpdTabVal > currSpdLimit + 10)
+            if (currSpdTabVal > currSpdLimit + tolerancespdlmt * 2)
             {
                 if (sound)
                 {
@@ -475,12 +483,7 @@
             }
             if (currSpdTabVal > currSpdLimit + 20)
             { 
-                selectSpdLimit(-1); 
-                if (sound)
-                {
-                    var _snd = document.getElementById("apoffsnd");
-                    _snd.play();
-                }
+                selectSpdLimit(-1);                 
             }
             
             display();
