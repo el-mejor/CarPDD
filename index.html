@@ -27,8 +27,6 @@
         var vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         var vph = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         
-        
-        
         var test = false;
         
         var speedtabzoomfactor = 6;
@@ -66,11 +64,14 @@
         var currSpdLimit = spdlmts[0];
         var tolerancespdlmt = 5;
         
+        var apdiscsound = new Audio("apoff.wav");
+        var retardsound = new Audio("retard.wav");
+        
 		drawPDD("pdd");
 		
         if (test)
         {
-            setInterval(function() { spd = (Math.random() * 25 + 173); }, 5000);
+            setInterval(function() { spd = (Math.random() * 25 + 50); }, 5000);
             setInterval(function() { hdg = (Math.random() * 25 + 90); }, 5000);
             setInterval(function() { alt = Math.random() * 1000; }, 5000);
         }
@@ -334,10 +335,21 @@
 		}
         
 		function setSpeedTabCurrV()
-		{
+		{            
             setTimeout(function() {		    
-                var _d = vdelta * 5;            
-                currSpdTabValStep = (spd - currSpdTabVal) / 3;
+                var _d = vdelta * 5;             
+                
+                currSpdTabValStep = (spd - currSpdTabVal) / 3.0;
+                
+                if (currSpdTabValStep >= 3.0)
+                { 
+                    currSpdTabValStep = 3.0;                     
+                }     
+                else if (currSpdTabValStep <= -3.0)
+                { 
+                    currSpdTabValStep = -3.0; 
+                }
+                
                 currSpdTabVal += currSpdTabValStep;
                 var _v = Math.trunc(currSpdTabVal);                
                 _v = _v * speedtabzoomfactor;
@@ -376,7 +388,8 @@
                 document.getElementById("spdTab").innerHTML += outElement;
             
                 setSpeedTabCurrV();
-            }, 100);
+                
+            }, 30);
 		}
         
         function showInvalidCross(v)
@@ -426,8 +439,13 @@
 			{
 				vdelta = 0;
 			}
-		if(!spd)
-		{ spd = 0; }
+		    
+            if(!spd)
+		    { spd = 0; }
+            if(!hdg)
+		    { hdg = 0; }
+            if(!alt)
+		    { alt = 0; }            
 				
             acc = position.coords.accuracy;
             
@@ -442,6 +460,17 @@
                 localStorage.setItem("idis_total_dist", dst)
                 lat = _lat;
                 lon = _lon;
+            }
+            
+            if (currSpdTabVal > currSpdLimit + 10)
+            {
+                retardsound.play();        
+            }
+            
+            if (currSpdTabVal > currSpdLimit + 20)
+            { 
+                selectSpdLimit(-1); 
+                apdiscsound.play();
             }
             
             display();
