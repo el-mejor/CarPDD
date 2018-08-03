@@ -398,6 +398,15 @@
                 
                 document.getElementById("spdTab").innerHTML += outElement;
             
+                if (currSpdTabVal > currSpdLimit + tolerancespdlmt * 2)
+                {
+                    if (sound)
+                    {
+                        var _snd = document.getElementById("retardsnd");
+                        _snd.play();        
+                    }
+                }
+                
                 setSpeedTabCurrV();
                 
             }, 30);
@@ -442,6 +451,7 @@
             hdg = position.coords.heading;
             var _spd = spd;
 			spd = position.coords.speed * 3.6;
+            spd = 45;
 			if (_spd && spd)
 			{
 				vdelta = _spd - spd;
@@ -473,14 +483,6 @@
                 lon = _lon;
             }
             
-            if (currSpdTabVal > currSpdLimit + tolerancespdlmt * 2)
-            {
-                if (sound)
-                {
-                    var _snd = document.getElementById("retardsnd");
-                    _snd.play();        
-                }
-            }
             if (currSpdTabVal > currSpdLimit + 20)
             { 
                 selectSpdLimit(-1);                 
