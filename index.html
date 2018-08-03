@@ -65,6 +65,7 @@
         var tolerancespdlmt = 5;
         
         var apdiscsound = new Audio("apoff.wav");
+        apdiscsound.play();
         var retardsound = new Audio("retard.wav");
         
 		drawPDD("pdd");
@@ -466,7 +467,6 @@
             {
                 retardsound.play();        
             }
-            
             if (currSpdTabVal > currSpdLimit + 20)
             { 
                 selectSpdLimit(-1); 
