@@ -28,6 +28,8 @@
     
     <script>	
 	    var sound = false;
+        var sndretard;
+        var sndapdisc;
         
         var vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         var vph = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -198,7 +200,14 @@
         
         function selectSpdLimit(v)
         {   
-            sound = true;
+            if (!sound)
+            {
+                sndapdisc = document.getElementById("apoffsnd");
+                sndretard = document.getElementById("retardsnd");
+                sound = true;   
+                sndapdisc.play();
+                sndretard.play();
+            }
             
             for (var i = 0; i < spdlmts.length; i++)
             {
@@ -212,8 +221,7 @@
                 currSpdLimit = 1000;
                 if (sound)
                 {
-                    var _snd = document.getElementById("apoffsnd");
-                    _snd.play();
+                    sndapdisc.play();
                 }
             
             }
@@ -483,9 +491,8 @@
             if (spd >= currSpdLimit + tolerancespdlmt * 2)
             {
                 if (sound)
-                {
-                    var _snd = document.getElementById("retardsnd");
-                    _snd.play();        
+                {                    
+                    sndretard.play();        
                 }
             }
             
