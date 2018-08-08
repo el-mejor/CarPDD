@@ -191,15 +191,13 @@
                                 
                 if (wplat.length > 0)
                 {
-                    console.log(lat, lon);
-                
                     
                     if (document.getElementById("route"))
                     {
                         document.getElementById("route").remove();
                     }
                     
-                    rosectr = document.getElementById("rosecenter");
+                    rosectr = document.getElementById("rose");
                     
                     var rte = "<g id='route'><path d='";
                     
@@ -224,8 +222,6 @@
                     
                     rte += "' stroke='lime' fill='none' /></g>";
                     
-                    console.log(rte);
-                    
                     rosectr.innerHTML += rte;
                 }  
                 
@@ -237,14 +233,14 @@
                     { document.getElementById("invalidCrossRose").remove(); }
                 }
                 else
-                {    
+                {   
                     rosectr = document.getElementById("rosecenter");
 
                     rosectr.innerHTML += `<g id="invalidCrossRose" transform="translate(0,${-rose})"><line x1="-20" y1="-20" x2="20" y2="20" style="stroke:red;stroke-width:4;" /><line x1="-20" y1="20" x2="20" y2="-20" style="stroke:red;stroke-width:4;" /></g>`;
                 }
                 
                 setRoseCurrC();
-            }, 100);
+            }, 1000);
         }
         
         function selectSpdLimit(v)
@@ -341,7 +337,7 @@
 		function setAltTabCurrV()
 		{
             setTimeout(function() {
-                currAltTabValStep = (alt - currAltTabVal) / 3;
+                currAltTabValStep = (alt - currAltTabVal) / 12;
                 currAltTabVal += currAltTabValStep;
                 var _v = Math.trunc(currAltTabVal);
                 document.getElementById("valAltTab").innerHTML = _v;
@@ -349,7 +345,7 @@
                 document.getElementById("altTab").setAttribute("transform", `translate(0,${_v})`);			
                 
                 setAltTabCurrV();
-            }, 100);
+            }, 2000);
 		}
 		
 		function genSpeedTabObj()
