@@ -152,6 +152,11 @@
             
             outElement += `<circle cx="0" cy="0" r="${_r}" style="stroke:white;stroke-width:2;fill:none;" />`;
             
+            outElement += `<circle cx="0" cy="0" r="${100}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            outElement += `<circle cx="0" cy="0" r="${75}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            outElement += `<circle cx="0" cy="0" r="${50}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            outElement += `<circle cx="0" cy="0" r="${25}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            
             for (var i = 0; i <= 360; i += 5)
             {
                 outElement += `<path d="M0 ${-_r} l0 -4" style="stroke:white;stroke-width:2;fill:none;" transform="rotate(${i})" />`;
@@ -214,11 +219,14 @@
                         if(lat < wplat[i])
                         { rtey = -rtey; }                        
                         
-                        if (getDistanceFromLatLonInKm(lat,lon,wplat[i],wplon[i])*100 < rose)
-                        {
+                        if (Math.sqrt(rtex*rtex+rtey*rtey) < rose * 1.3)
+                        {                            
                             rte += `${_c} ${rtex} ${rtey} `;                        
                             _c = "L";
                         }
+                        
+                        
+                        
                         /*rte += `<circle cx="${rtex}" cy="${rtey}" r="2" stroke="white" fill="none"/>`;                      */
                     }
                     
