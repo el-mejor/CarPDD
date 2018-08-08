@@ -214,9 +214,11 @@
                         if(lat < wplat[i])
                         { rtey = -rtey; }                        
                         
-                        rte += `${_c} ${rtex} ${rtey} `;
-                        
-                        _c = "L";
+                        if (getDistanceFromLatLonInKm(lat,lon,wplat[i],wplon[i])*100 < rose)
+                        {
+                            rte += `${_c} ${rtex} ${rtey} `;                        
+                            _c = "L";
+                        }
                         /*rte += `<circle cx="${rtex}" cy="${rtey}" r="2" stroke="white" fill="none"/>`;                      */
                     }
                     
@@ -240,7 +242,7 @@
                 }
                 
                 setRoseCurrC();
-            }, 1000);
+            }, 100);
         }
         
         function selectSpdLimit(v)
@@ -337,7 +339,7 @@
 		function setAltTabCurrV()
 		{
             setTimeout(function() {
-                currAltTabValStep = (alt - currAltTabVal) / 12;
+                currAltTabValStep = (alt - currAltTabVal) / 3;
                 currAltTabVal += currAltTabValStep;
                 var _v = Math.trunc(currAltTabVal);
                 document.getElementById("valAltTab").innerHTML = _v;
@@ -345,7 +347,7 @@
                 document.getElementById("altTab").setAttribute("transform", `translate(0,${_v})`);			
                 
                 setAltTabCurrV();
-            }, 2000);
+            }, 100);
 		}
 		
 		function genSpeedTabObj()
