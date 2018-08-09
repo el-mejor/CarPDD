@@ -313,7 +313,7 @@
 		
 		function setAccCurrV()
 		{
-            var a = acc;
+            var a = Math.trunc(acc);
             
             var svgPDD = document.getElementById("svgPDD");
             
@@ -342,7 +342,7 @@
 		
 		function setDstCurrV()
 		{
-            var a = dst;
+            var a = Math.trunc(dst);
 			document.getElementById("valDst").innerHTML = a + "";		
 		}
 		
