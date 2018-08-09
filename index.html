@@ -55,9 +55,8 @@
         var spd = 0;
 		var vdelta = 0;
         var acc = 999;
-        var dst = parseInt(localStorage.getItem("idis_total_dist"));
+        var dst = parseInt(localStorage.getItem("idis_total_dist"));      
         
-        console.log(localStorage.getItem("idis_wplat"));
         
         var wplat = [];
         var wplon = [];
@@ -259,8 +258,8 @@
                         if(lat < wplat[i])
                         { rtey = -rtey; }                        
                         
-                        if (Math.sqrt(rtex*rtex+rtey*rtey) < rose * 1.3)
-                        {                            
+                        if (true || Math.sqrt(rtex*rtex+rtey*rtey) < rose * 1.3)
+                        {                   
                             rte += `${_c} ${rtex} ${rtey} `;                        
                             _c = "L";
                         }
@@ -336,7 +335,7 @@
                 document.getElementById(_id).style.fill = "gray";
             }
             
-            rtecurrzoom = v;
+            rtecurrzoom = z;
             document.getElementById("rtezoom" + z).style.fill = "magenta";
         }
 		
