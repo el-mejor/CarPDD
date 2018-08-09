@@ -664,7 +664,10 @@
         {	
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(rtesrc, "text/xml");
-                        
+            
+            wplat = [];
+            wplon = [];
+            
             for (var i = 0; i < xmlDoc.getElementsByTagName("trkpt").length; i++)
 	        {
                 wplat.push(xmlDoc.getElementsByTagName("trkpt")[i].getAttribute("lat"));
