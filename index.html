@@ -31,6 +31,7 @@
     
     <script>	
 	    var sound = false;
+        var running = false;
         var sndretard;
         var sndapdisc;
         
@@ -156,18 +157,18 @@
                 svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
             }
             
-            showInvalidCross(true);
+            showInvalidCross(true);           
             
-                 
-            setSpeedTabCurrV();            
             setAltTabCurrV();
+            setSpeedTabCurrV();
+            setDstCurrV();
+            setAccCurrV();
+            setRoseCurrC();
         }
         
         function genRoseObj()
         {
             var _r = rose;
-            
-            
             
             var outElement = `<g id='rose' transform="translate(150,${rosepos})">`;
             
@@ -308,8 +309,10 @@
             document.getElementById("spdlmt" + v).style.fill = "magenta";
         }
 		
-		function setAccCurrV(a)
+		function setAccCurrV()
 		{
+            var a = acc;
+            
             var svgPDD = document.getElementById("svgPDD");
             
             if (document.getElementById("valAcc"))
@@ -335,8 +338,9 @@
             svgPDD.innerHTML += `<text x="225" y="${upperrow-10}" style="fill:${color};font-size:2em;" id="valAcc">${a}</text>`;
 		}
 		
-		function setDstCurrV(a)
+		function setDstCurrV()
 		{
+            var a = dst;
 			document.getElementById("valDst").innerHTML = a + "";		
 		}
 		
@@ -580,14 +584,12 @@
         function display()
         {   
             showInvalidCross(false);
-			setDstCurrV(Math.trunc(dst * 10)/10);
-			setAccCurrV(Math.trunc(acc));
-            setRoseCurrC(Math.trunc(hdg));
+
         }
         
         function errorPosition()
         {
-            setAccCurrV(Math.trunc(999));            
+            
             showInvalidCross(true);
         }
         
