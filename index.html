@@ -274,6 +274,8 @@
                     rosectr.innerHTML += `<g id="invalidCrossRose" transform="translate(0,${-rose})"><line x1="-20" y1="-20" x2="20" y2="20" style="stroke:red;stroke-width:4;" /><line x1="-20" y1="20" x2="20" y2="-20" style="stroke:red;stroke-width:4;" /></g>`;
                 }
                 
+                
+                
                 setRoseCurrC();
             }, 1000);
         }
@@ -584,7 +586,8 @@
         function display()
         {   
             showInvalidCross(false);
-
+            setAccCurrV();
+            setDstCurrV();
         }
         
         function errorPosition()
