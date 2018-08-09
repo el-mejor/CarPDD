@@ -88,6 +88,9 @@
         var markerV = [ 15, 25, 38, 45, 55 ];
         var markerID = [ "2", "3", "4", "5", "6" ];
 
+        var rtezoomvals = [ 1, 4, 10, 40, 100 ];
+        var rtecurrzoom = 1;
+        
         var maxSpeed = 183;
         var idealSpeed = 130;
         
@@ -146,16 +149,28 @@
             for (var i = 0; i < spdlmts.length; i++)
             {
                 var _id = "spdlmt" + spdlmts[i];
-                var _y = h + upperrow + 5;;
+                var _y = h + upperrow + 1;
                 var _x = 300/spdlmts.length * i;     
                 var _caption = spdlmts[i];
                 if (_caption == -1)
                 {
                     _caption = "opn";
                 }
-                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-32}" width="${300/spdlmts.length}" height="40" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
+                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-17}" width="${300/spdlmts.length}" height="25" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
                 svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
             }
+            
+            for (var i = 0; i < rtezoomvals.length; i++)
+            {
+                var _id = "rtezoom" + rtezoomvals[i];
+                var _y = h + upperrow + 1 + 25;
+                var _x = 300/rtezoomvals.length * i;     
+                var _caption = rtezoomvals[i];
+                
+                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-17}" width="${300/rtezoomvals.length}" height="25" fill="black" stroke="white" onmouseup="selectRteZoom(${rtezoomvals[i]})" />`;
+                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectRteZoom(${rtezoomvals[i]})">${_caption}</text>`;
+            }
+            selectRteZoom(rtezoomvals[0]);
             
             showInvalidCross(true);           
             
@@ -174,10 +189,10 @@
             
             outElement += `<circle cx="0" cy="0" r="${_r}" style="stroke:white;stroke-width:2;fill:none;" />`;
             
-            outElement += `<circle cx="0" cy="0" r="${100}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
-            outElement += `<circle cx="0" cy="0" r="${75}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
-            outElement += `<circle cx="0" cy="0" r="${50}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
-            outElement += `<circle cx="0" cy="0" r="${25}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            /*outElement += `<circle cx="0" cy="0" r="${100}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;*/
+            outElement += `<circle cx="0" cy="0" r="${rose*3/4}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            outElement += `<circle cx="0" cy="0" r="${rose*2/4}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
+            outElement += `<circle cx="0" cy="0" r="${rose*1/4}" style="stroke:white;stroke-width:1;fill:none;" stroke-dasharray="2"/>`;
             
             for (var i = 0; i <= 360; i += 5)
             {
@@ -231,10 +246,12 @@
                     
                     var _c = "M";
                     
+                    var _z = rose / rtecurrzoom;
+                    
                     for (var i= 0; i < wplat.length; i++)
                     {   
-                        var rtex = getDistanceFromLatLonInKm(0,lon,0,wplon[i])*100;
-                        var rtey = getDistanceFromLatLonInKm(lat,0,wplat[i],0)*100;
+                        var rtex = getDistanceFromLatLonInKm(0,lon,0,wplon[i])*_z;
+                        var rtey = getDistanceFromLatLonInKm(lat,0,wplat[i],0)*_z;
                         
                         if(lon > wplon[i])
                         { rtex = -rtex;}
@@ -309,6 +326,18 @@
             }
             
             document.getElementById("spdlmt" + v).style.fill = "magenta";
+        }
+        
+        function selectRteZoom(z)
+        {
+            for (var i = 0; i < rtezoomvals.length; i++)
+            {
+                var _id = "rtezoom" + rtezoomvals[i];
+                document.getElementById(_id).style.fill = "gray";
+            }
+            
+            rtecurrzoom = v;
+            document.getElementById("rtezoom" + z).style.fill = "magenta";
         }
 		
 		function setAccCurrV()
