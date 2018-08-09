@@ -42,9 +42,10 @@
         var speedtabzoomfactor = 6;
         
         var h = 420;
-        var ht = (500 * 1.1) * vph / vpw;
+        var ht = (300 * 1.2) * vph / vpw;
         var upperrow = 40;
-        var rose = 110;
+        var rose = 130;
+        var rosepos = h/2;
         
         var lat = 0;
         var lon = 0;
@@ -59,14 +60,17 @@
         
         var wplat = [];
         var wplon = [];
+        var rtename = "test";
         
         var str_wplat = localStorage.getItem("idis_wplat");
         var str_wplon = localStorage.getItem("idis_wplon");
-
+        var str_rtename = localStorage.getItem("idis_rtename");
+        
         if (str_wplat)
         {
             wplat = str_wplat.split(",");
             wplon = str_wplon.split(",");
+            rtename = str_rtename;            
         }
 
         
@@ -107,8 +111,9 @@
 		{   
 			var frame = document.getElementById(targetID);
 			frame.style.background = "black";
-			frame.innerHTML = `<svg width="90vw" height="170vh" viewbox="0 0 300 ${ht}" id="svgPDD" style="margin:10px;"></svg>`;
+			frame.innerHTML = `<svg width="90vw" height="120vh" viewbox="0 0 300 ${ht}" id="svgPDD" style="margin:10px;"></svg>`;
 			var svgPDD = document.getElementById("svgPDD");
+            svgPDD.innerHTML += genRoseObj();
 			svgPDD.innerHTML += `<rect x="0" y="${upperrow}" width="80" height="${h}" style="stroke:none;fill:dimgray" />"`;
 			svgPDD.innerHTML += `<line x1="0" y1="${upperrow}" x2="100" y2="${upperrow}" style="stroke:white;stroke-width:2" />`;
 			svgPDD.innerHTML += `<line x1="0" y1="${h-1}" x2="100" y2="${h-1}" style="stroke:white;stroke-width:2" />`;			
@@ -140,19 +145,19 @@
             for (var i = 0; i < spdlmts.length; i++)
             {
                 var _id = "spdlmt" + spdlmts[i];
-                var _y = upperrow + 40 + 40 * i;
-                var _x = 120;     
+                var _y = h + upperrow + 5;;
+                var _x = 300/spdlmts.length * i;     
                 var _caption = spdlmts[i];
                 if (_caption == -1)
                 {
                     _caption = "opn";
                 }
-                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-32}" width="80" height="40" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
-                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
+                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-32}" width="${300/spdlmts.length}" height="40" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
+                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
             }
             
             showInvalidCross(true);
-            svgPDD.innerHTML += genRoseObj();
+            
                  
             setSpeedTabCurrV();            
             setAltTabCurrV();
@@ -162,7 +167,9 @@
         {
             var _r = rose;
             
-            var outElement = `<g id='rose' transform="translate(150,${h+rose*1.3})">`;
+            
+            
+            var outElement = `<g id='rose' transform="translate(150,${rosepos})">`;
             
             outElement += `<circle cx="0" cy="0" r="${_r}" style="stroke:white;stroke-width:2;fill:none;" />`;
             
@@ -190,7 +197,7 @@
             
             outElement += "</g>";
             
-            outElement += `<g id='rosecenter' transform="translate(150,${h+rose*1.3})">`;
+            outElement += `<g id='rosecenter' transform="translate(150,${rosepos})">`;
             
             outElement += `<path d="M-10 0 l 20 0" style="stroke:white;stroke-width:2;fill:none;" />`;
             outElement += `<path d="M0 -10 l 0 20" style="stroke:white;stroke-width:2;fill:none;" />`;
@@ -206,7 +213,7 @@
         {
             setTimeout(function() 
             {
-                document.getElementById("rose").setAttribute("transform", `translate(150,${h+rose*1.3}) rotate(${0})`);
+                document.getElementById("rose").setAttribute("transform", `translate(150,${rosepos}) rotate(${0})`);
                                 
                 if (wplat)
                 {
@@ -217,6 +224,7 @@
                     }
                     
                     rosectr = document.getElementById("rose");
+                    
                     
                     var rte = "<g id='route'><path d='";
                     
@@ -244,14 +252,16 @@
                         /*rte += `<circle cx="${rtex}" cy="${rtey}" r="2" stroke="white" fill="none"/>`;                      */
                     }
                     
-                    rte += "' stroke='lime' fill='none' /></g>";
+                    rte += "' stroke='lime' fill='none' />";
+                    rte += `<text x="0" y="${rose + 60}" alignment-baseline="middle" text-anchor="middle"><tspan style="fill:yellow;font-size:0.8em">${rtename}</tspan></text>`;
+                    rte += "</g>";
                     
                     rosectr.innerHTML += rte;
                 }  
                 
                 if (hdg) 
                 {
-                    document.getElementById("rose").setAttribute("transform", `translate(150,${h+rose*1.3}) rotate(${-hdg})`);
+                    document.getElementById("rose").setAttribute("transform", `translate(150,${rosepos}) rotate(${-hdg})`);
                     
                     if (document.getElementById("invalidCrossRose"))
                     { document.getElementById("invalidCrossRose").remove(); }
@@ -612,6 +622,8 @@
                 interpretRte(str);
             };
 
+            localStorage.setItem("idis_rtename", filename);
+            
             reader.readAsText(file);  
         }
         
