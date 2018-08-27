@@ -1546,7 +1546,8 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
 
 	<div id="pdd"></div>
     <div id="rteimpbox" class="impbox" style="color:magenta;">
-	   RTE: <input type="file" name="files[]" id="fileimp"/>		
+	   RTE: <input type="file" name="files[]" id="fileimp"/><br/>   
+       RTE: <input type="button" name="clear" id="clear" value="CLR"/><br/>        
     </div>
     
     <script>	
@@ -1558,7 +1559,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
         var vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         var vph = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         
-        var test = true;
+        var test = false;
         
         var speedtabzoomfactor = 6;
         
@@ -1619,6 +1620,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
         var tolerancespdlmt = 5;
         
         document.getElementById("fileimp").addEventListener("change", importRte, false);
+        document.getElementById("clear").addEventListener("click", clearRte, false);
         
 		drawPDD("pdd");
 		
@@ -2119,8 +2121,15 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             {                
                 dst += _dst;
                 localStorage.setItem("idis_total_dist", dst)
+                
                 lat = _lat;
                 lon = _lon;
+                
+                wplat.push(lat);
+                wplon.push(lon);  
+            
+                localStorage.setItem("idis_wplat", wplat);
+                localStorage.setItem("idis_wplon", wplon);
             }
             
             if (currSpdTabVal > currSpdLimit + 20)
@@ -2198,12 +2207,25 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             for (var i = 0; i < xmlDoc.getElementsByTagName("trkpt").length; i++)
 	        {
                 wplat.push(xmlDoc.getElementsByTagName("trkpt")[i].getAttribute("lat"));
-                wplon.push(xmlDoc.getElementsByTagName("trkpt")[i].getAttribute("lon"));
-            
+                wplon.push(xmlDoc.getElementsByTagName("trkpt")[i].getAttribute("lon"));            
             }
             
             localStorage.setItem("idis_wplat", wplat);
             localStorage.setItem("idis_wplon", wplon);
+            
+            location.reload();
+        }
+        
+        function clearRte()
+        {
+            dst = 0;
+            wplat = [];
+            wplon = [];
+            
+            localStorage.setItem("idis_wplat", wplat);
+            localStorage.setItem("idis_wplon", wplon);
+            localStorage.setItem("idis_rtename", "");
+            localStorage.setItem("idis_total_dist", dst)
             
             location.reload();
         }
