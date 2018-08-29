@@ -2127,6 +2127,12 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 
                 wplat.push(lat);
                 wplon.push(lon);  
+                
+                while (wplat.length > 3600 * 8)
+                {
+                    wplat.splice(1,1);
+                    wplon.splice(1,1);
+                }                
             
                 localStorage.setItem("idis_wplat", wplat);
                 localStorage.setItem("idis_wplon", wplon);
