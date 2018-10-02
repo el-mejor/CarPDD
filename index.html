@@ -1852,7 +1852,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             
             var y1 = h - speedtabzoomfactor * currSpdLimit;             
             var y2 = h - speedtabzoomfactor * (currSpdLimit);  
-            var y3 = h - speedtabzoomfactor * (currSpdLimit + _currtolerance);            
+            var y3 = h - speedtabzoomfactor * (currSpdLimit + _currtolerance + 1);            
             
             if (document.getElementById("spdlimit"))
             { document.getElementById("spdlimit").remove(); }            
@@ -2041,8 +2041,8 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             }
             
             var _color = "red";
-            if (currSpdTabVal < currSpdLimit + _currtolerance) { _color = "orange"; }
-            if (currSpdTabVal < currSpdLimit) { _color = "lime"; }
+            if (currSpdTabVal < currSpdLimit + _currtolerance + 1) { _color = "orange"; }
+            if (currSpdTabVal <= currSpdLimit) { _color = "lime"; }
 
             if (document.getElementById("valSpdTab"))
             { document.getElementById("valSpdTab").remove(); }
@@ -2147,7 +2147,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
             }
             
-            if (spd > currSpdLimit + _currtolerance)
+            if (spd > currSpdLimit + _currtolerance + 1)
             {
                 if (sound)
                 {                    
