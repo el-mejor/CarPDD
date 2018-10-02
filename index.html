@@ -1617,7 +1617,9 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
         
         var spdlmts = [ 30, 50, 60, 70, 80, 100, 120, -1 ];
         var currSpdLimit = 1000;
-        var tolerancespdlmt = 5;
+        var tolerancespdlmt = 3;
+        var tolerancerelat = 100;
+        var tolerancespdlmtrel = 1.03;
         
         document.getElementById("fileimp").addEventListener("change", importRte, false);
         document.getElementById("clear").addEventListener("click", clearRte, false);
@@ -1841,6 +1843,48 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             }
             
             document.getElementById("spdlmt" + v).style.fill = "magenta";
+            
+            var _currtolerance = tolerancespdlmt;
+            if (currSpdTabVal > tolerancerelat) 
+            {
+                _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
+            }
+            
+            var y1 = h - speedtabzoomfactor * currSpdLimit;             
+            var y2 = h - speedtabzoomfactor * (currSpdLimit);  
+            var y3 = h - speedtabzoomfactor * (currSpdLimit + _currtolerance);            
+            
+            if (document.getElementById("spdlimit"))
+            { document.getElementById("spdlimit").remove(); }            
+            
+            var outElement;
+
+            outElement += `<g id="spdlimit">`;
+
+            if (currSpdLimit >= 1000)
+            {   
+                var gd = h - speedtabzoomfactor * greenDot * tachoDeviation;
+                outElement += `<circle cx="80" cy="${gd}" r="5" style="stroke:lime;stroke-width:3;fill:none"/>`;
+            } 
+            else
+            {
+                var gd = h - speedtabzoomfactor * currSpdLimit * (1 / tachoDeviation);
+                /*outElement += `<line x1="65" y1="${gd+2}" x2="75" y2="${gd+2}" style="stroke:lime;stroke-width:2;" />`;
+                outElement += `<line x1="65" y1="${gd-2}" x2="75" y2="${gd-2}" style="stroke:lime;stroke-width:2;" />`;*/
+                outElement += `<circle cx="80" cy="${gd}" r="5" style="stroke:lime;stroke-width:3;fill:none"/>`;
+            }
+            
+            var gd = h - speedtabzoomfactor * currSpdLimit * tachoDeviation;                
+            outElement += `<line x1="65" y1="${gd+2}" x2="75" y2="${gd+2}" style="stroke:yellow;stroke-width:2;" />`;
+            outElement += `<line x1="65" y1="${gd-2}" x2="75" y2="${gd-2}" style="stroke:yellow;stroke-width:2;" />`;
+
+            outElement += `<line id="spdlimit1" x1="84" y1="${y2}" x2="84" y2="${y3}" style="stroke:orange;stroke-width:4;"/>`;
+            outElement += `<line id="spdlimit2" x1="84" y1="${y-1000}" x2="84" y2="${y3}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;    
+            outElement += `<line id="spdlimit2" x1="88" y1="${y-1000}" x2="88" y2="${y3}" style="stroke:red;stroke-width:2;" />`; 
+            outElement += `<polyline id="spdlimit3" points="85,${y1} 100,${y1-8} 100,${y1+8} 85,${y1}" style="stroke:magenta;fill:none;stroke-width:2;" />`;
+            outElement += `</g>`;
+
+            document.getElementById("spdTab").innerHTML += outElement;
         }
         
         function selectRteZoom(z)
@@ -1989,41 +2033,22 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             { document.getElementById("vdelta").remove(); }
             var svgPDD = document.getElementById("svgPDD");
             svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(_d*speedtabzoomfactor)}" style="stroke:yellow;stroke-width:4;" />`;
-            /*svgPDD.innerHTML += `<path d="M70 ${h/2+(_d*speedtabzoomfactor)} l-5 0 l5 -10 l5 10 l-5 10 l-5 -10" style="stroke:none;fill:yellow;"/>`;*/
-
-            var y1 = h - speedtabzoomfactor * currSpdLimit; 
-            var y2 = h - speedtabzoomfactor * (currSpdLimit + tolerancespdlmt);  
-            var y3 = h - speedtabzoomfactor * (currSpdLimit + 2 * tolerancespdlmt);            
+            
+            var _currtolerance = tolerancespdlmt;
+            if (currSpdTabVal > tolerancerelat)
+            {
+                _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
+            }
+            
             var _color = "red";
-            if (currSpdTabVal < currSpdLimit + 2 * tolerancespdlmt) { _color = "orange"; }
-            if (currSpdTabVal < currSpdLimit + tolerancespdlmt) { _color = "lime"; }
+            if (currSpdTabVal < currSpdLimit + _currtolerance) { _color = "orange"; }
+            if (currSpdTabVal < currSpdLimit) { _color = "lime"; }
 
             if (document.getElementById("valSpdTab"))
             { document.getElementById("valSpdTab").remove(); }
 
             svgPDD.innerHTML += `<text x="5" y="${upperrow-10}" style="fill:${_color};font-size:2em;" id="valSpdTab">${Math.trunc(spd)}</text>`;
 
-            if (document.getElementById("spdlimit"))
-            { document.getElementById("spdlimit").remove(); }            
-            var outElement;
-
-            outElement += `<g id="spdlimit">`;
-
-            gd = h - speedtabzoomfactor * greenDot * tachoDeviation;
-            outElement += `<circle cx="80" cy="${gd}" r="6" style="stroke:lime;stroke-width:4;fill:none"/>`;
-
-            gd = h - speedtabzoomfactor * currSpdLimit * tachoDeviation;                
-            outElement += `<line x1="65" y1="${gd+2}" x2="75" y2="${gd+2}" style="stroke:lime;stroke-width:2;" />`;
-            outElement += `<line x1="65" y1="${gd-2}" x2="75" y2="${gd-2}" style="stroke:lime;stroke-width:2;" />`;
-
-
-            outElement += `<line id="spdlimit1" x1="84" y1="${y2}" x2="84" y2="${y3}" style="stroke:orange;stroke-width:4;"/>`;
-            outElement += `<line id="spdlimit2" x1="84" y1="${y-1000}" x2="84" y2="${y3}" style="stroke:red;stroke-width:8;" stroke-dasharray="8"/>`;    
-            outElement += `<line id="spdlimit2" x1="88" y1="${y-1000}" x2="88" y2="${y3}" style="stroke:red;stroke-width:2;" />`; 
-            outElement += `<polyline id="spdlimit3" points="85,${y1} 100,${y1-8} 100,${y1+8} 85,${y1}" style="stroke:magenta;fill:none;stroke-width:2;" />`;
-            outElement += `</g>`;
-
-            document.getElementById("spdTab").innerHTML += outElement;
 		}
         
         function showInvalidCross(v)
@@ -2101,7 +2126,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 wplat.push(lat);
                 wplon.push(lon);  
                 
-                while (wplat.length > 3600)
+                while (wplat.length > 900)
                 {
                     wplat.splice(1,1);
                     wplon.splice(1,1);
@@ -2116,7 +2141,13 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 selectSpdLimit(-1);                 
             }
             
-            if (spd >= currSpdLimit + tolerancespdlmt * 2)
+            var _currtolerance = tolerancespdlmt;
+            if (currSpdTabVal > tolerancerelat)
+            {
+                _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
+            }
+            
+            if (spd > currSpdLimit + _currtolerance)
             {
                 if (sound)
                 {                    
