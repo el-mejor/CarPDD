@@ -1559,7 +1559,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
         var vpw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         var vph = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         
-        var test = false;
+        var test = true;
         
         var speedtabzoomfactor = 6;
         
@@ -1581,7 +1581,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
         
         var wplat = [];
         var wplon = [];
-        var rtename = "test";
+        var rtename = "V0991";
         
         var str_wplat = localStorage.getItem("idis_wplat");
         var str_wplon = localStorage.getItem("idis_wplon");
@@ -1593,7 +1593,6 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             wplon = str_wplon.split(",");
             rtename = str_rtename;            
         }
-
         
         if (!dst) {dst = 0;}        
         
@@ -1628,7 +1627,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
 		
         if (test)
         {
-            setInterval(function() { spd = (Math.random() * 25 + 70); }, 5000);
+            setInterval(function() { spd = (Math.random() * 25 + 110); }, 5000);
             setInterval(function() { hdg = (Math.random() * 25 + 90); }, 5000);
             setInterval(function() { alt = Math.random() * 1000; }, 5000);
             
@@ -1682,19 +1681,19 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 {
                     _caption = "opn";
                 }
-                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-17}" width="${300/spdlmts.length}" height="25" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
-                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
+                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-17}" width="${300/spdlmts.length}" height="50" fill="black" stroke="white" onmouseup="selectSpdLimit(${spdlmts[i]})" />`;
+                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+15}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectSpdLimit(${spdlmts[i]})">${_caption}</text>`;
             }
             
             for (var i = 0; i < rtezoomvals.length; i++)
             {
                 var _id = "rtezoom" + rtezoomvals[i];
-                var _y = h + upperrow + 1 + 25;
+                var _y = h + upperrow + 1 + 50;
                 var _x = 300/rtezoomvals.length * i;     
                 var _caption = rtezoomvals[i];
                 
-                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-17}" width="${300/rtezoomvals.length}" height="25" fill="black" stroke="white" onmouseup="selectRteZoom(${rtezoomvals[i]})" />`;
-                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+2}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectRteZoom(${rtezoomvals[i]})">${_caption}</text>`;
+                svgPDD.innerHTML += `<rect x="${_x}" y="${_y-17}" width="${300/rtezoomvals.length}" height="50" fill="black" stroke="white" onmouseup="selectRteZoom(${rtezoomvals[i]})" />`;
+                svgPDD.innerHTML += `<text x="${_x+2}" y="${_y+15}" style="fill:gray;font-size:1.3em;" id="${_id}" onmouseup="selectRteZoom(${rtezoomvals[i]})">${_caption}</text>`;
             }
             selectRteZoom(rtezoomvals[0]);
             
@@ -1845,9 +1844,9 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             document.getElementById("spdlmt" + v).style.fill = "magenta";
             
             var _currtolerance = tolerancespdlmt;
-            if (currSpdTabVal > tolerancerelat) 
+            if (currSpdLimit >= tolerancerelat) 
             {
-                _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
+                _currtolerance = Math.round(currSpdLimit * (tolerancespdlmtrel - 1));                
             }
             
             var y1 = h - speedtabzoomfactor * currSpdLimit;             
@@ -2035,9 +2034,9 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             svgPDD.innerHTML += `<line id="vdelta" x1="70" y1="${h/2}" x2="70" y2="${h/2+(_d*speedtabzoomfactor)}" style="stroke:yellow;stroke-width:4;" />`;
             
             var _currtolerance = tolerancespdlmt;
-            if (currSpdTabVal > tolerancerelat)
+            if (currSpdLimit >= tolerancerelat) 
             {
-                _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
+                _currtolerance = Math.round(currSpdLimit * (tolerancespdlmtrel - 1));                
             }
             
             var _color = "red";
@@ -2142,9 +2141,9 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
             }
             
             var _currtolerance = tolerancespdlmt;
-            if (currSpdTabVal > tolerancerelat)
+            if (currSpdLimit >= tolerancerelat) 
             {
-                _currtolerance = currSpdTabVal * (1 - tolerancespdlmtrel);
+                _currtolerance = Math.round(currSpdLimit * (tolerancespdlmtrel - 1));                
             }
             
             if (spd > currSpdLimit + _currtolerance + 1)
