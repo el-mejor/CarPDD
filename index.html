@@ -1619,6 +1619,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
         var tolerancespdlmt = 3;
         var tolerancerelat = 100;
         var tolerancespdlmtrel = 1.03;
+	var lmtdisengage = 10;
         
         document.getElementById("fileimp").addEventListener("change", importRte, false);
         document.getElementById("clear").addEventListener("click", clearRte, false);
@@ -2135,7 +2136,7 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 localStorage.setItem("idis_wplon", wplon);
             }
             
-            if (currSpdTabVal > currSpdLimit + 20)
+            if (currSpdTabVal > currSpdLimit + lmtdisengage)
             { 
                 selectSpdLimit(-1);                 
             }
