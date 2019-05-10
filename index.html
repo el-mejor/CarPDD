@@ -2132,8 +2132,8 @@ CQAKAP7/+/8OAAoAIAAfABkACwAHAP7/CAD8/wEA+P8=" id="retardsnd"></audio>
                 
                 while (wplat.length > 900)
                 {
-                    wplat.splice(1,1);
-                    wplon.splice(1,1);
+                    wplat.shift();
+                    wplon.shift();
                 }                
             
                 localStorage.setItem("idis_wplat", wplat);
